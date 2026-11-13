@@ -26,11 +26,6 @@ $$('[data-proc]').forEach(b=>b.addEventListener('click',()=>{
 }));
 // map hover
 $$('.map .st').forEach(p=>{p.addEventListener('mouseenter',()=>p.classList.add('hl'));p.addEventListener('mouseleave',()=>p.classList.remove('hl'))});
-// explainer video: activates automatically once assets/video/ivo-explainer.mp4 exists
-$$('.explainer[data-src]').forEach(box=>{const src=box.dataset.src,vid=$('video',box);
-  fetch(src,{method:'HEAD'}).then(r=>{if(!r.ok)return;const so=document.createElement('source');so.src=src;so.type='video/mp4';vid.appendChild(so);
-    if(box.dataset.vtt){fetch(box.dataset.vtt,{method:'HEAD'}).then(t=>{if(t.ok){const tr=document.createElement('track');tr.kind='subtitles';tr.srclang='en';tr.label='English';tr.src=box.dataset.vtt;tr.default=true;vid.appendChild(tr)}})}
-    vid.controls=true;vid.load();box.classList.add('ready')}).catch(()=>{})});
 // portal walkthrough tabs
 $$('[data-wt]').forEach(b=>b.addEventListener('click',()=>{
   $$('[data-wt]').forEach(x=>x.setAttribute('aria-selected',x===b));

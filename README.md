@@ -9,10 +9,8 @@ Pages (one folder each, URLs mirror the live site): `/`, `/commercial-constructi
 - Shared styles/scripts: `assets/css/site.css`, `assets/js/site.js`
 - The four-step request form lives only on the home page (`/#request`); every page links to it.
   Links can preselect the form with `?service=` / `?priority=` (e.g. `/?service=Emergency%20response&priority=Emergency#request`).
-- Hero video: `assets/video/ivo-hero-1080.mp4` / `-720.mp4` + `ivo-hero-poster.jpg`
-- **Explainer video slot:** drop the animated "How IVO works" video at `assets/video/ivo-explainer.mp4`
-  (optional captions: `assets/video/ivo-explainer.vtt`). The players on `/how-to-work-with-ivo/` and the home page
-  switch on automatically once the file exists; until then they show `ivo-explainer-poster.jpg` with "Coming soon".
+- Hero video: `assets/video/ivo-hero-1080.mp4` / `-720.mp4` + `ivo-hero-poster.jpg` (21 s loop)
+- Explainer video: `assets/video/ivo-explainer.mp4` with English captions `ivo-explainer.vtt` and `ivo-explainer-poster.jpg`, embedded on `/how-to-work-with-ivo/` (#explainer) and the home page.
 - Subpage copy is based on the live pages, rewritten into the v2 layout. Licensing details and numeric claims are removed.
 - Photos and logo mark come from the current ivoservgroup.com
 - The request form is UI only and posts nowhere

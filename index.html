@@ -229,10 +229,11 @@
     </div>
 <!-- EXPLAINER-SPOT -->
     <div class="ex-grid sm">
-      <div class="rv"><div class="explainer" id="explainer-player" data-src="assets/video/ivo-explainer.mp4" data-vtt="assets/video/ivo-explainer.vtt">
-  <!-- VIDEO SLOT: the animated "How IVO works" explainer (voice-over + subtitles) goes at assets/video/ivo-explainer.mp4 (optional captions: assets/video/ivo-explainer.vtt). It switches on automatically once the file exists. -->
-  <video playsinline preload="none" poster="assets/video/ivo-explainer-poster.jpg" aria-label="How IVO works: animated explainer with voice-over and subtitles"></video>
-  <div class="soon"><b>Coming soon</b><span>Animated explainer with voice-over &amp; subtitles</span></div>
+      <div class="rv"><div class="explainer ready" id="explainer-player">
+  <video controls playsinline preload="metadata" poster="assets/video/ivo-explainer-poster.jpg" aria-label="How IVO works: animated explainer with voice-over and subtitles">
+    <source src="assets/video/ivo-explainer.mp4" type="video/mp4">
+    <track kind="subtitles" srclang="en" label="English" src="assets/video/ivo-explainer.vtt" default>
+  </video>
 </div></div>
       <div class="rv"><div class="eyebrow">Watch: How IVO works</div><h3 style="font-size:30px">See one request go from<br>first call to closeout.</h3><p style="color:var(--muted);margin-top:12px;font-size:15.5px">A short animated explainer with voice-over and subtitles.</p><p class="more-row" style="margin-top:22px"><a class="btn line" href="how-to-work-with-ivo/">How to work with IVO →</a></p></div>
     </div>

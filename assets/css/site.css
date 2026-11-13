@@ -487,9 +487,6 @@ nav.main a[aria-current=page]:not(.btn)::after{right:0}
 /* explainer video */
 .explainer{position:relative;background:var(--navy);aspect-ratio:16/9;overflow:hidden;border:1px solid var(--line);box-shadow:0 40px 80px -40px #061d2a66}
 .explainer video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:var(--navy)}
-.explainer .soon{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;background:#061d2acc;color:#dfe8ee;font-size:13px}
-.explainer .soon b{color:var(--gold-l);font-weight:500;letter-spacing:.14em;text-transform:uppercase;font-size:11px}
-.explainer.ready .soon{display:none}
 .ex-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:64px;align-items:center}
 .ex-grid.sm{grid-template-columns:1.3fr 1fr;gap:48px;margin-top:72px;padding-top:56px;border-top:1px solid var(--line)}
 .ex-grid ul{list-style:none;margin-top:22px}.ex-grid li{padding:10px 0;border-top:1px solid var(--line);font-size:15px}
@@ -537,5 +534,4 @@ nav.main a[aria-current=page]:not(.btn)::after{right:0}
   .phero{min-height:auto}.phero .wrap{padding-top:64px;padding-bottom:40px}
   .scenario .txt,.scenario ol{padding:32px 24px}
   .wt-panel{padding:28px 22px}.det{padding:26px 22px}.det-acc{padding:0 20px}
-  .explainer .soon{flex-direction:column;align-items:flex-start;gap:2px}
 }
