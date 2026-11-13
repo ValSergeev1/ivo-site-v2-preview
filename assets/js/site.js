@@ -6,8 +6,8 @@ tg.addEventListener('click',()=>{const o=nav.classList.toggle('open');tg.setAttr
 $$('#nav a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');tg.setAttribute('aria-expanded',false)}));
 // hero video
 const v=$('#heroVid'),vb=$('#vidToggle');
-if(matchMedia('(prefers-reduced-motion: reduce)').matches){v.removeAttribute('autoplay');v.pause()}
-vb.addEventListener('click',()=>{if(v.paused){v.play();vb.textContent='❚❚ Pause video';vb.setAttribute('aria-pressed','false')}else{v.pause();vb.textContent='▶ Play video';vb.setAttribute('aria-pressed','true')}});
+if(v&&matchMedia('(prefers-reduced-motion: reduce)').matches){v.removeAttribute('autoplay');v.pause()}
+if(v&&vb)vb.addEventListener('click',()=>{if(v.paused){v.play();vb.textContent='❚❚ Pause video';vb.setAttribute('aria-pressed','false')}else{v.pause();vb.textContent='▶ Play video';vb.setAttribute('aria-pressed','true')}});
 // reveal
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'});
 $$('.rv').forEach(el=>io.observe(el));
@@ -15,9 +15,9 @@ $$('.rv').forEach(el=>io.observe(el));
 function showSvc(k,scroll){
   $$('.svc-detail').forEach(p=>p.classList.toggle('open',p.dataset.panel===k));
   $$('.svc-tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.svc===k));
-  if(scroll)$('#svc-detail').scrollIntoView({behavior:'smooth',block:'center'});
+  if(scroll&&$('#svc-detail'))$('#svc-detail').scrollIntoView({behavior:'smooth',block:'center'});
 }
-$$('[data-svc]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();showSvc(el.dataset.svc,el.tagName==='A')}));
+$$('[data-svc]:not(input)').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();showSvc(el.dataset.svc,el.tagName==='A')}));
 $$('[data-close]').forEach(b=>b.addEventListener('click',()=>showSvc(null)));
 // process tabs
 $$('[data-proc]').forEach(b=>b.addEventListener('click',()=>{
@@ -26,8 +26,22 @@ $$('[data-proc]').forEach(b=>b.addEventListener('click',()=>{
 }));
 // map hover
 $$('.map .st').forEach(p=>{p.addEventListener('mouseenter',()=>p.classList.add('hl'));p.addEventListener('mouseleave',()=>p.classList.remove('hl'))});
-// request form (preview only; posts nowhere)
-const f=$('#reqForm'),steps=$$('fieldset',f),prog=$$('.req-prog span',f),prev=$('#prevBtn'),next=$('#nextBtn'),lbl=$('#stepLbl');
+// explainer video: activates automatically once assets/video/ivo-explainer.mp4 exists
+$$('.explainer[data-src]').forEach(box=>{const src=box.dataset.src,vid=$('video',box);
+  fetch(src,{method:'HEAD'}).then(r=>{if(!r.ok)return;const so=document.createElement('source');so.src=src;so.type='video/mp4';vid.appendChild(so);
+    if(box.dataset.vtt){fetch(box.dataset.vtt,{method:'HEAD'}).then(t=>{if(t.ok){const tr=document.createElement('track');tr.kind='subtitles';tr.srclang='en';tr.label='English';tr.src=box.dataset.vtt;tr.default=true;vid.appendChild(tr)}})}
+    vid.controls=true;vid.load();box.classList.add('ready')}).catch(()=>{})});
+// portal walkthrough tabs
+$$('[data-wt]').forEach(b=>b.addEventListener('click',()=>{
+  $$('[data-wt]').forEach(x=>x.setAttribute('aria-selected',x===b));
+  $$('[data-wt-panel]').forEach(p=>p.hidden=p.dataset.wtPanel!==b.dataset.wt);
+}));
+// request form (preview only; posts nowhere). Lives on the home page only.
+const f=$('#reqForm');if(!f)return;
+{const q=new URLSearchParams(location.search),sv=q.get('service'),ur=q.get('priority');
+ if(sv){const i=f.querySelector(`input[name=svc][value="${CSS.escape(sv)}"]`);if(i)i.checked=true}
+ if(ur){const i=f.querySelector(`input[name=urg][value="${CSS.escape(ur)}"]`);if(i)i.checked=true}}
+const steps=$$('fieldset',f),prog=$$('.req-prog span',f),prev=$('#prevBtn'),next=$('#nextBtn'),lbl=$('#stepLbl');
 let cur=0;const files=[];
 function render(){
   steps.forEach((s,i)=>s.hidden=i!==cur);
@@ -68,5 +82,5 @@ fin.addEventListener('change',()=>add(fin.files));
 ['dragleave','drop'].forEach(t=>drop.addEventListener(t,e=>{e.preventDefault();drop.classList.remove('over')}));
 drop.addEventListener('drop',e=>add(e.dataTransfer.files));
 f.addEventListener('submit',e=>e.preventDefault());
-render();
+render();emChk();
 })();
