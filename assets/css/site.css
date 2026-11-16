@@ -757,3 +757,37 @@ html.page-leave body{opacity:0;transition:opacity .18s ease}
 @media (max-width:900px){.portal-login{grid-template-columns:1fr;gap:32px}}
 
 .portal-mark{width:48px;height:48px;margin:0 0 16px;display:block}
+
+/* t88u additions: Our apps, operate path, status steps, compact sections */
+.compact-m{padding:80px 0}
+@media (max-width:700px){.compact-m{padding:48px 0}}
+
+.op-path{grid-template-columns:repeat(5,1fr)}
+@media (max-width:1100px){.op-path{grid-template-columns:repeat(3,1fr)}.op-path li::after{display:none}}
+@media (max-width:700px){.op-path{grid-template-columns:1fr}}
+
+.status-row{list-style:none;display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:8px 0 0;padding:0}
+.status-row li{background:#fff;border:1px solid var(--line);padding:20px 18px;min-height:44px}
+.status-row b{display:block;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-ink);margin-bottom:8px}
+.status-row span{display:block;font-size:14px;color:var(--muted);line-height:1.5}
+@media (max-width:900px){.status-row{grid-template-columns:1fr}}
+
+.apps-grid{display:grid;grid-template-columns:1.05fr 1.05fr 1.5fr;gap:32px;align-items:start;margin-top:8px}
+.apps-grid article h3{font-size:20px;margin:18px 0 8px;letter-spacing:-.015em}
+.apps-grid article p{font-size:14.5px;color:var(--muted);line-height:1.55;max-width:36em}
+.apps-grid .device{width:min(100%,280px);margin:0}
+.desk-frame{background:#04141e;border:1px solid rgba(225,195,149,.32);border-radius:12px;padding:10px;box-shadow:0 40px 80px -28px #061d2acc}
+.desk-frame img{width:100%;height:auto;display:block;border-radius:6px;aspect-ratio:1280/760;object-fit:cover;object-position:top left}
+.faq-page details{margin-bottom:0}
+@media (max-width:1000px){
+  .apps-grid{grid-template-columns:1fr 1fr}
+  .apps-grid article:last-child{grid-column:1/-1}
+  .apps-grid .device{margin:0 auto}
+}
+@media (max-width:700px){
+  .apps-grid{grid-template-columns:1fr}
+  .apps-grid article:last-child{grid-column:auto}
+}
+@media (prefers-reduced-motion:reduce){
+  .apps-grid img,.desk-frame img{transition:none}
+}
