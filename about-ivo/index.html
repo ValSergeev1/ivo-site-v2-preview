@@ -9,8 +9,7 @@
 <meta name="theme-color" content="#061d2a">
 <link rel="icon" href="../assets/img/favicon.png">
 <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" href="../assets/fonts/inter-tight-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../assets/css/site.css">
 </head>
 <body>
@@ -23,7 +22,7 @@
 </div></div>
 
 <header class="site"><div class="wrap">
-  <a href="../" class="brand" aria-label="IVO Group home">
+  <a href="../" class="brand" aria-label="IVO GROUP home">
     <img src="../assets/img/ivo-mark-navy.png" alt="" width="46" height="46">
     <span class="wm"><b>IVO</b><span>GROUP</span></span>
   </a>
@@ -36,6 +35,7 @@
     <div class="dd"><a href="../how-to-work-with-ivo/">How it works<span class="car" aria-hidden="true">▾</span></a>
       <div class="dd-menu"><a href="../how-to-work-with-ivo/">How to work with IVO</a><a href="../portal-walkthrough/">Portal walkthrough</a><a href="https://ivoservgroup.com/portal" target="_blank" rel="noopener">Portal sign-in ↗</a></div></div>
     <a href="../partner-with-ivo/">Partner with IVO</a>
+    <a href="https://ivoservgroup.com/portal" class="nav-login">Portal sign-in</a>
     <a href="../#request" class="btn sm">Start a request</a>
   </nav>
   <button class="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav"><span></span><span></span><span></span></button>
@@ -123,6 +123,13 @@
   </div>
 </footer>
 
+<div class="menu-scrim"></div>
+<nav class="mbar" aria-label="Mobile shortcuts">
+  <button type="button" class="mbar-btn" data-open-menu aria-controls="nav" aria-expanded="false"><span class="mbar-ico" aria-hidden="true"></span>Menu</button>
+  <a href="tel:+12065399549" class="mbar-btn">Call</a>
+  <a href="../#request" class="mbar-cta">Start a request</a>
+</nav>
+<!-- mcall kept as fallback; hidden by CSS -->
 <div class="mcall"><a href="tel:+12065399549">Call</a><a href="../#request">Start a request</a></div>
 <script src="../assets/js/site.js" defer></script>
 </body>

@@ -1,12 +1,34 @@
 (()=>{
 const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
-// mobile menu
+// mobile menu (header + bottom-sheet)
 const tg=$('.menu-toggle'),nav=$('#nav');
-tg.addEventListener('click',()=>{const o=nav.classList.toggle('open');tg.setAttribute('aria-expanded',o)});
-$$('#nav a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');tg.setAttribute('aria-expanded',false)}));
-// hero video
+function setMenu(open){
+  if(!nav)return;
+  nav.classList.toggle('open',open);
+  document.body.classList.toggle('menu-open',open);
+  if(tg)tg.setAttribute('aria-expanded',open?'true':'false');
+  $$('[data-open-menu]').forEach(b=>b.setAttribute('aria-expanded',open?'true':'false'));
+  if(open){nav.scrollTop=0}
+}
+if(tg)tg.addEventListener('click',()=>setMenu(!nav.classList.contains('open')));
+$$('[data-open-menu]').forEach(b=>b.addEventListener('click',()=>setMenu(!nav.classList.contains('open'))));
+const scrim=$('.menu-scrim');
+if(scrim)scrim.addEventListener('click',()=>setMenu(false));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')setMenu(false)});
+$$('#nav a').forEach(a=>a.addEventListener('click',()=>setMenu(false)));
+// sticky header hairline
+const hdr=$('header.site');
+if(hdr){
+  const onScroll=()=>hdr.classList.toggle('is-scrolled',window.scrollY>8);
+  onScroll();window.addEventListener('scroll',onScroll,{passive:true});
+}
+// hero video: play only on larger screens, and never when the user prefers less motion
 const v=$('#heroVid'),vb=$('#vidToggle');
-if(v&&matchMedia('(prefers-reduced-motion: reduce)').matches){v.removeAttribute('autoplay');v.pause()}
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const small=matchMedia('(max-width:700px)').matches;
+if(v){
+  if(!(reduce||small)){v.play().catch(()=>{});}
+}
 if(v&&vb)vb.addEventListener('click',()=>{if(v.paused){v.play();vb.textContent='❚❚ Pause video';vb.setAttribute('aria-pressed','false')}else{v.pause();vb.textContent='▶ Play video';vb.setAttribute('aria-pressed','true')}});
 // reveal
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'});
@@ -92,4 +114,19 @@ render();emChk();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", collapse);
   else collapse();
+})();
+
+// product showcase tabs
+(() => {
+  const root = document.querySelector("[data-platform]");
+  if (!root) return;
+  const tabs = [...root.querySelectorAll("[data-plat]")];
+  const panels = [...root.querySelectorAll("[data-plat-panel]")];
+  const marks = [...root.querySelectorAll("[data-plat-step]")];
+  function show(key) {
+    tabs.forEach((b) => b.setAttribute("aria-selected", b.dataset.plat === key ? "true" : "false"));
+    panels.forEach((p) => { p.hidden = p.dataset.platPanel !== key; });
+    marks.forEach((li) => li.classList.toggle("on", li.dataset.platStep === key));
+  }
+  tabs.forEach((b) => b.addEventListener("click", () => show(b.dataset.plat)));
 })();

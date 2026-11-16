@@ -9,8 +9,7 @@
 <meta name="theme-color" content="#061d2a">
 <link rel="icon" href="../assets/img/favicon.png">
 <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" href="../assets/fonts/inter-tight-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../assets/css/site.css">
 </head>
 <body>
@@ -23,7 +22,7 @@
 </div></div>
 
 <header class="site"><div class="wrap">
-  <a href="../" class="brand" aria-label="IVO Group home">
+  <a href="../" class="brand" aria-label="IVO GROUP home">
     <img src="../assets/img/ivo-mark-navy.png" alt="" width="46" height="46">
     <span class="wm"><b>IVO</b><span>GROUP</span></span>
   </a>
@@ -36,6 +35,7 @@
     <div class="dd"><a href="../how-to-work-with-ivo/" aria-current="page">How it works<span class="car" aria-hidden="true">▾</span></a>
       <div class="dd-menu"><a href="../how-to-work-with-ivo/">How to work with IVO</a><a href="../portal-walkthrough/" aria-current="page">Portal walkthrough</a><a href="https://ivoservgroup.com/portal" target="_blank" rel="noopener">Portal sign-in ↗</a></div></div>
     <a href="../partner-with-ivo/">Partner with IVO</a>
+    <a href="https://ivoservgroup.com/portal" class="nav-login">Portal sign-in</a>
     <a href="../#request" class="btn sm">Start a request</a>
   </nav>
   <button class="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav"><span></span><span></span><span></span></button>
@@ -49,6 +49,31 @@
     <h1>Your portal,<b>one step at a time.</b></h1>
     <p class="lead">Know where to submit, communicate, review documents and track the next step.</p>
     <div class="ctas"><a href="#walkthrough" class="btn">Start the walkthrough <span class="arr">→</span></a><a href="https://ivoservgroup.com/portal" class="btn ghost" target="_blank" rel="noopener">Portal sign-in ↗</a><a href="../#request" class="btn ghost">Start a request</a></div>
+  </div>
+</section>
+
+<section class="platform" id="platform" aria-label="IVO workspace walkthrough">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <div><div class="eyebrow">The IVO workspace</div><h2>From the first request<br>to a documented closeout.</h2></div>
+      <p class="lead">A sample walkthrough of the IVO workspace, using preview data. It follows one request as it is scoped, assigned to a technician, updated in the field, and closed out with photos and a written record.</p>
+    </div>
+    <div class="platform-ui rv" data-platform>
+      <div class="platform-main">
+        <div class="platform-steps" role="tablist" aria-label="Workspace steps">
+          <button type="button" role="tab" data-plat="request" aria-selected="true" aria-controls="plat-request" id="tab-request"><span class="num">1</span> Request</button><button type="button" role="tab" data-plat="scope" aria-selected="false" aria-controls="plat-scope" id="tab-scope"><span class="num">2</span> Scope</button><button type="button" role="tab" data-plat="technician" aria-selected="false" aria-controls="plat-technician" id="tab-technician"><span class="num">3</span> Technician</button><button type="button" role="tab" data-plat="updates" aria-selected="false" aria-controls="plat-updates" id="tab-updates"><span class="num">4</span> Updates</button><button type="button" role="tab" data-plat="closeout" aria-selected="false" aria-controls="plat-closeout" id="tab-closeout"><span class="num">5</span> Closeout</button>
+        </div>
+        <div class="platform-stage">
+          <div class="plat-panel" id="plat-request" role="tabpanel" data-plat-panel="request" aria-labelledby="tab-request"><div class="device"><div class="device-notch" aria-hidden="true"></div><div class="device-screen"><img src="../assets/img/product/step-request.webp" width="390" height="844" alt="Sample customer request screen in the IVO workspace" loading="eager" decoding="async"></div></div><div class="plat-cap"><span class="chip">Sample</span><span class="chip rec">Received</span><p>You send the need, photos and timing. This sample is a hallway leak at Cedar Court Apartments.</p></div></div><div class="plat-panel" id="plat-scope" role="tabpanel" data-plat-panel="scope" aria-labelledby="tab-scope" hidden><div class="device"><div class="device-notch" aria-hidden="true"></div><div class="device-screen"><img src="../assets/img/product/step-scope.webp" width="390" height="844" alt="Sample job tracker with a written scope, budget and a visible timeline" loading="lazy" decoding="async"></div></div><div class="plat-cap"><span class="chip">Sample</span><span class="chip scoped">Scoped</span><p>IVO writes a scope and budget you can review before work starts. Status and next steps stay on the request.</p></div></div><div class="plat-panel" id="plat-technician" role="tabpanel" data-plat-panel="technician" aria-labelledby="tab-technician" hidden><div class="device"><div class="device-notch" aria-hidden="true"></div><div class="device-screen"><img src="../assets/img/product/step-technician.webp" width="390" height="844" alt="Sample technician Today card for the same ceiling-leak job" loading="lazy" decoding="async"></div></div><div class="plat-cap"><span class="chip">Sample</span><span class="chip assigned">Assigned</span><p>A matched technician is assigned. They see the window, checklist and site details on today's job card.</p></div></div><div class="plat-panel" id="plat-updates" role="tabpanel" data-plat-panel="updates" aria-labelledby="tab-updates" hidden><div class="device"><div class="device-notch" aria-hidden="true"></div><div class="device-screen"><img src="../assets/img/product/step-updates.webp" width="390" height="844" alt="Sample photo timeline from the field, on the same job" loading="lazy" decoding="async"></div></div><div class="plat-cap"><span class="chip">Sample</span><span class="chip onsite">On site</span><p>Photos and notes land on the request as work happens, including check-in, progress and issue shots.</p></div></div><div class="plat-panel" id="plat-closeout" role="tabpanel" data-plat-panel="closeout" aria-labelledby="tab-closeout" hidden><div class="device"><div class="device-notch" aria-hidden="true"></div><div class="device-screen"><img src="../assets/img/product/step-closeout.webp" width="390" height="844" alt="Sample closeout and sign-off screen in the IVO workspace" loading="lazy" decoding="async"></div></div><div class="plat-cap"><span class="chip">Sample</span><span class="chip sign">Sign-off</span><p>Completion photos, punch items and a written record you can sign off, saved with the request.</p></div></div>
+        </div>
+      </div>
+      <aside class="platform-side">
+        <div class="sample-note">Sample data · preview only</div>
+        <ol class="timeline">
+          <li data-plat-step="request" class="on"><b>Request</b><span>You send the need, photos and timing. This sample is a hallway leak at Cedar Court Apartments.</span></li><li data-plat-step="scope"><b>Scope</b><span>IVO writes a scope and budget you can review before work starts. Status and next steps stay on the request.</span></li><li data-plat-step="technician"><b>Technician</b><span>A matched technician is assigned. They see the window, checklist and site details on today's job card.</span></li><li data-plat-step="updates"><b>Updates</b><span>Photos and notes land on the request as work happens, including check-in, progress and issue shots.</span></li><li data-plat-step="closeout"><b>Closeout</b><span>Completion photos, punch items and a written record you can sign off, saved with the request.</span></li>
+        </ol>
+      </aside>
+    </div>
   </div>
 </section>
 
@@ -73,22 +98,10 @@
       </ul>
       <p style="margin-top:28px;display:flex;gap:12px;flex-wrap:wrap"><a class="btn" href="../#request">Start a request</a><a class="btn line" href="https://ivoservgroup.com/portal" target="_blank" rel="noopener">Sign in to the portal ↗</a></p>
     </div>
-    <div class="mock rv" aria-label="Illustration of the customer portal">
-      <div class="bar"><i></i><i></i><i></i><span>IVO Portal · Customer workspace</span></div>
-      <div class="body">
-        <aside><a class="on">Requests</a><a>Properties</a><a>Approvals</a><a>Documents</a><a>Messages</a><a>Invoices</a></aside>
-        <main>
-          <div class="hdr"><div><h5>Suite 210 · Storefront door repair</h5><small>Retail center · Priority 2 · Urgent</small></div><span class="pill">In progress</span></div>
-          <div class="tl"><div class="d"></div><div class="d"></div><div class="d"></div><div class="d"></div><div></div><div></div></div>
-          <div class="tl-l"><span>Submitted</span><span>Scoped</span><span>Approved</span><span>Work</span><span>Closeout</span></div>
-          <div class="cards">
-            <div class="c"><h6>Photos</h6><div class="thumbs"><img src="../assets/img/ivo-05.webp" alt=""><img src="../assets/img/ivo-06.webp" alt=""><img src="../assets/img/ivo-04.webp" alt=""></div></div>
-            <div class="c"><h6>Budget</h6><div class="bud"><span>Approved scope</span><b>✓</b></div><div class="bud"><span>Change request</span><span class="pill w">Awaiting you</span></div></div>
-            <div class="c" style="grid-column:1/-1"><h6>Latest update</h6><div class="msg">Closer and pivot replaced. Door is locking normally. Final photos uploaded. Please confirm the finish color for the new kick plate.</div></div>
-          </div>
-        </main>
+    <div class="device rv" aria-label="Sample closeout and sign-off screen in the IVO workspace">
+        <div class="device-notch" aria-hidden="true"></div>
+        <div class="device-screen"><img src="../assets/img/product/step-closeout.webp" width="390" height="844" alt="Sample closeout and sign-off screen in the IVO workspace" loading="lazy" decoding="async"></div>
       </div>
-    </div>
   </div>
 </section>
 
@@ -140,6 +153,13 @@
   </div>
 </footer>
 
+<div class="menu-scrim"></div>
+<nav class="mbar" aria-label="Mobile shortcuts">
+  <button type="button" class="mbar-btn" data-open-menu aria-controls="nav" aria-expanded="false"><span class="mbar-ico" aria-hidden="true"></span>Menu</button>
+  <a href="tel:+12065399549" class="mbar-btn">Call</a>
+  <a href="../#request" class="mbar-cta">Start a request</a>
+</nav>
+<!-- mcall kept as fallback; hidden by CSS -->
 <div class="mcall"><a href="tel:+12065399549">Call</a><a href="../#request">Start a request</a></div>
 <script src="../assets/js/site.js" defer></script>
 </body>
