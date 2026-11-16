@@ -72,16 +72,23 @@ section{padding:112px 0}
 .sample{display:inline-block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-ink);background:var(--gold-l);padding:2px 7px;border-radius:2px;vertical-align:middle}
 
 /* hero */
-.hero{position:relative;min-height:min(88vh,820px);display:flex;align-items:flex-end;color:#fff;overflow:hidden;background:var(--navy) url(../video/ivo-hero-poster.jpg) center/cover;padding:0}
+.hero{position:relative;min-height:min(88vh,820px);display:flex;align-items:flex-end;color:#fff;overflow:hidden;background:var(--navy) url(../video/ivo-hero-poster-m.jpg) center/cover;padding:0}
+@media (min-width:701px){.hero{background-image:url(../video/ivo-hero-poster.jpg)}}
 .hero-poster,.hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .hero-poster{z-index:0}
 .hero video{z-index:1}
-.hero::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,29,42,.94) 0%,rgba(6,29,42,.78) 38%,rgba(6,29,42,.25) 75%,rgba(6,29,42,.15)),linear-gradient(0deg,rgba(6,29,42,.9),transparent 40%);z-index:1}
-.hero .wrap{position:relative;z-index:2;width:100%;padding-top:96px;padding-bottom:40px}
+.hero::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:
+  linear-gradient(90deg,rgba(6,29,42,.96) 0%,rgba(6,29,42,.9) 36%,rgba(6,29,42,.7) 62%,rgba(6,29,42,.55) 100%),
+  linear-gradient(180deg,rgba(6,29,42,.45) 0%,rgba(6,29,42,.2) 28%,rgba(6,29,42,.82) 100%)}
+.hero video,.hero-poster{z-index:0}
+.hero .wrap{z-index:3}
+.hero h1,.hero .sub{color:#fff;text-shadow:0 2px 28px rgba(6,29,42,.85)}
+.hero p.lead{color:#eef3f6;text-shadow:0 1px 18px rgba(6,29,42,.8)}
+.hero .wrap{position:relative;z-index:3;width:100%;padding-top:96px;padding-bottom:40px}
 .hero h1{color:#fff;font-size:clamp(52px,8.4vw,112px);line-height:.92;letter-spacing:-.045em;text-transform:uppercase;font-weight:400;margin-bottom:28px}
 .hero h1 b{font-weight:600;display:block}
 .hero .sub{font-size:20px;color:#fff;margin-bottom:10px}
-.hero p.lead{color:#c9d6de;max-width:540px;margin-bottom:34px}
+.hero p.lead{color:#eef3f6;max-width:540px;margin-bottom:34px}
 .hero .ctas{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:56px}
 .hero-sla{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #ffffff30;max-width:900px}
 .hero-sla div{padding:18px 22px 4px 0}
@@ -320,7 +327,7 @@ details[open] summary::after{transform:rotate(45deg)}
 details p{padding:0 40px 24px 0;color:var(--muted);font-size:15.5px}
 
 /* cta + footer */
-.cta{background:var(--navy) url(../img/ivo-07.webp) center/cover;position:relative;padding:120px 0;color:#fff}
+.cta{background:linear-gradient(165deg,#0c2938 0%,#061d2a 55%,#04141e 100%);position:relative;padding:120px 0;color:#fff;border-top:1px solid rgba(179,138,85,.38)}
 .cta::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#061d2af2,#061d2acc 60%,#061d2a99)}
 .cta .wrap{position:relative;display:flex;justify-content:space-between;align-items:end;gap:40px;flex-wrap:wrap}
 .cta h2{color:#fff;max-width:700px}
@@ -467,7 +474,7 @@ nav.main a[aria-current=page]:not(.btn)::after{right:0}
 .rel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 .rel{display:block;background:#fff;border:1px solid var(--line);transition:box-shadow .25s,transform .25s}
 .rel:hover{box-shadow:0 18px 40px -20px #061d2a55;transform:translateY(-3px)}
-.rel img{width:100%;aspect-ratio:16/9;object-fit:cover}
+.rel img{width:100%;aspect-ratio:16/9;object-fit:cover}.rel:not(:has(img)){border-top:3px solid var(--gold)}
 .rel div{padding:22px 22px 24px}.rel small{font-size:11px;letter-spacing:.16em;color:var(--gold);text-transform:uppercase}
 .rel h3{margin:8px 0 8px;font-size:20px}.rel p{font-size:14px;color:var(--muted)}
 /* gallery */
@@ -708,3 +715,45 @@ body.menu-open header.site{z-index:75}
   .hero-sla{display:flex;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;gap:0;scrollbar-width:thin}
   .hero-sla div{flex:0 0 78%;scroll-snap-align:start;border-bottom:0;border-right:1px solid #ffffff1a;padding:12px 16px 12px 0}
 }
+
+.split:not(:has(.split-img)){display:block;max-width:720px}
+
+/* Cross-document page transitions (fade). Header stays put. */
+@view-transition { navigation: auto; }
+::view-transition-old(root) { animation: ivo-fade-out .28s ease both; }
+::view-transition-new(root) { animation: ivo-fade-in .32s ease both; }
+::view-transition-old(site-header),
+::view-transition-new(site-header) { animation: none; }
+header.site { view-transition-name: site-header; }
+@keyframes ivo-fade-out { to { opacity: 0; } }
+@keyframes ivo-fade-in { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation: none; }
+}
+
+@media (max-width:700px){
+  .hero::before{background:
+    linear-gradient(180deg,rgba(6,29,42,.62) 0%,rgba(6,29,42,.86) 38%,rgba(6,29,42,.94) 100%),
+    linear-gradient(90deg,rgba(6,29,42,.88),rgba(6,29,42,.78));
+  }
+}
+
+html.page-leave body{opacity:0;transition:opacity .18s ease}
+@media (prefers-reduced-motion:reduce){html.page-leave body{opacity:1;transition:none}}
+
+/* Portal sign-in (preview) */
+.portal-hero{background:linear-gradient(165deg,#0c2938 0%,#061d2a 58%,#04141e 100%);min-height:auto}
+.portal-hero .wrap{padding-top:72px;padding-bottom:48px}
+.portal-login{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:48px;align-items:start}
+.portal-card{background:#fff;border:1px solid var(--line);padding:36px 32px;border-radius:4px;box-shadow:0 24px 50px -32px #061d2a33}
+.portal-card .f{margin-top:16px}
+.portal-card label{display:block;font-size:13px;font-weight:500;margin-bottom:6px;color:var(--navy)}
+.portal-card input{width:100%;min-height:48px;border:1px solid var(--line);padding:0 14px;font:400 16px var(--f);border-radius:2px;background:#fff;color:var(--navy)}
+.portal-card input:focus{outline:2px solid var(--gold);outline-offset:1px}
+.portal-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
+.portal-card .note{margin-top:16px;color:var(--navy);background:#f6efe3;border:1px solid #e7d7b8;padding:12px 14px}
+@media (max-width:900px){.portal-login{grid-template-columns:1fr;gap:32px}}
+
+.portal-mark{width:48px;height:48px;margin:0 0 16px;display:block}

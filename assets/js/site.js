@@ -53,6 +53,20 @@ $$('[data-wt]').forEach(b=>b.addEventListener('click',()=>{
   $$('[data-wt]').forEach(x=>x.setAttribute('aria-selected',x===b));
   $$('[data-wt-panel]').forEach(p=>p.hidden=p.dataset.wtPanel!==b.dataset.wt);
 }));
+// lazy posters for below-fold videos
+if('IntersectionObserver' in window){
+  const po=new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      if(!e.isIntersecting)return;
+      const v=e.target, src=v.getAttribute('data-poster');
+      if(src && !v.getAttribute('poster')) v.setAttribute('poster', src);
+      po.unobserve(v);
+    });
+  },{rootMargin:'240px'});
+  $$('video[data-poster]').forEach(v=>po.observe(v));
+}else{
+  $$('video[data-poster]').forEach(v=>{if(!v.getAttribute('poster')) v.setAttribute('poster', v.getAttribute('data-poster'));});
+}
 // request form (preview only; posts nowhere). Lives on the home page only.
 const f=$('#reqForm');if(!f)return;
 {const q=new URLSearchParams(location.search),sv=q.get('service'),ur=q.get('priority');
@@ -129,4 +143,21 @@ render();emChk();
     marks.forEach((li) => li.classList.toggle("on", li.dataset.platStep === key));
   }
   tabs.forEach((b) => b.addEventListener("click", () => show(b.dataset.plat)));
+})();
+
+/* Same-origin fallback fade when the View Transitions API is not available. */
+(() => {
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduce) return;
+  if ("startViewTransition" in document) return;
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest("a[href]");
+    if (!a || a.target === "_blank" || a.hasAttribute("download")) return;
+    const url = new URL(a.href, location.href);
+    if (url.origin !== location.origin) return;
+    if (url.pathname === location.pathname && url.hash) return;
+    e.preventDefault();
+    document.documentElement.classList.add("page-leave");
+    setTimeout(() => { location.href = a.href; }, 180);
+  });
 })();
