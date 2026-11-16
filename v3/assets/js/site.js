@@ -1,4 +1,4 @@
-// IVO Serv Group site: menu, language switch and the two public forms. No dependencies, no tracking.
+// IVO Serv Group site: menu and the two public forms. No dependencies, no tracking.
 (() => {
   "use strict";
   const $ = (s, r = document) => r.querySelector(s);
@@ -15,9 +15,6 @@
       if (e.key === "Escape" && drawer.classList.contains("open")) { drawer.classList.remove("open"); btn.setAttribute("aria-expanded", "false"); btn.focus(); }
     });
   }
-
-  // Language switch: each option's value is the URL of the same page in that language.
-  $$("select[data-lang-switch]").forEach((sel) => sel.addEventListener("change", () => { if (sel.value) location.href = sel.value; }));
 
   // Forms
   $$("form[data-ivo-form]").forEach(setupForm);
