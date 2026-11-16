@@ -79,3 +79,17 @@ drop.addEventListener('drop',e=>add(e.dataTransfer.files));
 f.addEventListener('submit',e=>e.preventDefault());
 render();emChk();
 })();
+
+/* On small screens, start FAQs collapsed so pages are shorter; everything stays reachable. */
+(() => {
+  const q = window.matchMedia("(max-width:600px)");
+  function collapse() {
+    if (!q.matches) return;
+    document.querySelectorAll(".faq-grid details[open], .faq-sec details[open], details.m-acc[open]").forEach((d, i) => {
+      if (i === 0) return; // keep the first one open as a cue
+      d.removeAttribute("open");
+    });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", collapse);
+  else collapse();
+})();

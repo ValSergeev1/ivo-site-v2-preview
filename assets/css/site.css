@@ -1,8 +1,9 @@
-/* IVO Group — website preview v2. Palette taken from ivoservgroup.com */
+/* IVO Group — website preview v2. Colors aligned with the approved V03 refresh. */
 :root{
-  --navy:#061d2a; --navy2:#0c2938; --navy3:#153543; --slate:#425c68;
-  --gold:#b38a55; --gold-d:#a8885f; --gold-l:#e1c395; --gold-ink:#60431f;
-  --paper:#f8fafb; --mist:#eef2f4; --line:#dce4e8; --ink:#173442; --muted:#4b6068; --white:#fff;
+  --navy:#061d2a; --navy2:#0c2938; --navy3:#153543; --slate:#4f6676;
+  --gold:#b38a55; --gold-d:#886034; --gold-l:#e1c395; --gold-ink:#886034;
+  --paper:#f3f5f7; --mist:#e9edf1; --line:#dce4e8; --ink:#061d2a; --muted:#2c4655; --white:#fff;
+  --urgent:#e8590c;
   --f:"neue-haas-grotesk-display-pro","Inter Tight","Helvetica Neue",Helvetica,Arial,sans-serif;
   --wrap:1200px; --r:2px;
 }
@@ -534,4 +535,62 @@ nav.main a[aria-current=page]:not(.btn)::after{right:0}
   .phero{min-height:auto}.phero .wrap{padding-top:64px;padding-bottom:40px}
   .scenario .txt,.scenario ol{padding:32px 24px}
   .wt-panel{padding:28px 22px}.det{padding:26px 22px}.det-acc{padding:0 20px}
+}
+
+/* --- V03-aligned mobile shortening: tighter spacing, swipe cards, hide decorative duplicates --- */
+@media (max-width:900px){
+  section{padding:56px 0}
+  .sec-head{margin-bottom:28px;gap:20px}
+  .split+.split{margin-top:40px}
+}
+@media (max-width:600px){
+  section{padding:44px 0}
+  .sec-head{margin-bottom:20px;gap:12px}
+  .lead{font-size:16px}
+  .phero .wrap{padding-top:48px;padding-bottom:28px}
+  .hero .wrap{padding-top:56px;padding-bottom:28px}
+  .scenario .txt,.scenario ol{padding:20px 16px}
+  .wt-panel{padding:20px 16px}
+  .det{padding:18px 16px}
+  .cta{padding:48px 0}
+  .more-row{margin-top:20px}
+  .path li,.steps li{padding-top:18px}
+  .steps{row-gap:20px}
+
+  /* Decorative duplicates: process is already listed as steps/path; photos already appear in the hero */
+  .flow, .intro-img{display:none}
+
+  /* Horizontal swipe carousels for card grids */
+  .svc-grid, .model-grid, .ind-grid, .role-grid, .rel-grid, .net-grid,
+  .promise-grid, .resp, .work-grid, .gal, .areas, .ind {
+    display:flex !important;
+    grid-template-columns:none !important;
+    grid-template-rows:none !important;
+    overflow-x:auto;
+    overscroll-behavior-x:contain;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    gap:12px;
+    margin-left:-20px;
+    margin-right:-20px;
+    padding:4px 20px 14px;
+    scrollbar-width:thin;
+  }
+  .svc-grid > *, .model-grid > *, .ind-grid > *, .role-grid > *, .rel-grid > *,
+  .net-grid > *, .promise-grid > *, .resp > *, .work-grid > *, .gal > *,
+  .areas > *, .ind > article, .ind > a, .ind > div {
+    flex:0 0 min(82%, 300px);
+    scroll-snap-align:start;
+    min-width:0;
+  }
+  .work-grid figure:first-child,
+  .gal figure:nth-child(1),
+  .gal figure:nth-child(6){grid-column:auto;grid-row:auto;flex-basis:min(82%, 300px)}
+  .model-grid article+article{border-top:0;padding-top:0}
+  .promise-grid div{border-bottom:0;border-right:0;padding:16px 16px 16px 0}
+  .svc-detail.open{margin-top:16px}
+
+  details.m-acc > summary,
+  .faq-grid details > summary,
+  .faq-sec details > summary{min-height:44px}
 }
