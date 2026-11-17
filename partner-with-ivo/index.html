@@ -65,13 +65,13 @@
     <div class="eyebrow">Partner with IVO · Customers, contractors &amp; suppliers</div>
     <h1>Another resource<b>your team can call.</b></h1>
     <p class="lead">A clear place to start for customers, independent contractors and suppliers. Tell us what you need or what your business can provide, and use the relevant portal to keep the relationship organized.</p>
-    <div class="ctas"><a href="#paths" class="btn">Choose your path <span class="arr">→</span></a><a href="https://valsergeev1.github.io/ivo-platform-prototype/v3/apply/" class="btn ghost" target="_blank" rel="noopener">Join our partner network ↗</a><a href="tel:+12065399549" class="btn ghost">Call (206) 539-9549</a></div>
+    <div class="ctas"><a href="#paths" class="btn">Choose your path <span class="arr">→</span></a><a href="#apply" class="btn ghost">Join our partner network</a><a href="tel:+12065399549" class="btn ghost">Call (206) 539-9549</a></div>
   </div>
 </section>
 
 <section class="mist">
   <div class="wrap">
-<div class="sec-head rv" id="paths"><div><div class="eyebrow">Choose your path</div><h2>How would you like to work with IVO?</h2></div><p class="lead">Start with the form that fits your relationship. The team will review your details and guide the next step.</p></div><div class="role-grid"><div class="role rv"><span class="n">01</span><h3>Customers &amp; property teams</h3><p>Tell us about a repair, property requirement or upcoming project.</p><a class="btn" href="../#request">Start a customer request</a></div><div class="role rv"><span class="n">02</span><h3>Subcontractors</h3><p>Introduce your trades, service area and business capabilities.</p><a class="btn line" href="https://valsergeev1.github.io/ivo-platform-prototype/v3/apply/" target="_blank" rel="noopener">Apply as a subcontractor ↗</a></div><div class="role rv"><span class="n">03</span><h3>Vendors &amp; suppliers</h3><p>Share the products or services your business can supply.</p><a class="btn line" href="https://valsergeev1.github.io/ivo-platform-prototype/v3/apply/" target="_blank" rel="noopener">Apply as a vendor / supplier ↗</a></div></div>
+<div class="sec-head rv" id="paths"><div><div class="eyebrow">Choose your path</div><h2>How would you like to work with IVO?</h2></div><p class="lead">Start with the form that fits your relationship. The team will review your details and guide the next step.</p></div><div class="role-grid"><div class="role rv"><span class="n">01</span><h3>Customers &amp; property teams</h3><p>Tell us about a repair, property requirement or upcoming project.</p><a class="btn" href="../#request">Start a customer request</a></div><div class="role rv"><span class="n">02</span><h3>Subcontractors</h3><p>Introduce your trades, service area and business capabilities.</p><a class="btn line" href="#apply">Apply as a subcontractor</a></div><div class="role rv"><span class="n">03</span><h3>Vendors &amp; suppliers</h3><p>Share the products or services your business can supply.</p><a class="btn line" href="#apply">Apply as a vendor / supplier</a></div></div>
   </div>
 </section>
 
@@ -107,7 +107,53 @@
   <div class="wrap">
 <div class="sec-head rv"><div><div class="eyebrow">For contractors &amp; vendors</div><h2>A clear path to working together.</h2></div><p class="lead">Network businesses are reviewed by trade, service area and fit before they are considered for opportunities.</p></div><ol class="path rv"><li><h3>Apply</h3><p>Share your company, trades, service areas and availability.</p></li><li><h3>Qualification review</h3><p>Review applicable qualifications, experience and fit.</p></li><li><h3>Onboarding</h3><p>Complete the required documents and operating expectations.</p></li><li><h3>Eligible for assignments</h3><p>Be considered for scopes matching your approved capabilities.</p></li></ol><p class="note">Application or approval does not guarantee work. Assignments depend on scope, location, availability and applicable qualifications.</p>
 <p id="invited-by-manager" class="lead" style="margin-top:22px">If a property manager invited you to join IVO, use the same application. You’ll complete the same qualification checks before any work can be assigned.</p>
-<p style="margin-top:28px"><a class="btn" href="https://valsergeev1.github.io/ivo-platform-prototype/v3/apply/" target="_blank" rel="noopener">Start an application ↗</a></p>
+<div class="partner-apply rv" id="apply">
+    <div class="eyebrow">Application</div>
+    <h2>Start an application.</h2>
+    <p class="lead" style="margin-top:16px">Tell us about your company, the trades you perform and the areas you cover. Every application is reviewed for fit. Submitting one does not guarantee work or assignments.</p>
+    <form class="partner-form" data-ivo-form="partner" method="post" novalidate>
+      <div class="f full"><span class="lab">I am applying as a…</span>
+        <div class="chips" role="radiogroup" aria-label="Application type">
+          <label><input type="radio" name="kind" value="contractor" checked><span>Contractor / trade</span></label>
+          <label><input type="radio" name="kind" value="vendor"><span>Vendor / supplier</span></label>
+        </div>
+      </div>
+      <div class="fg">
+        <div class="f full"><label for="pa-co">Company name</label><input id="pa-co" name="company" autocomplete="organization" required><span class="err" id="pa-co-err" aria-live="polite"></span></div>
+        <div class="f"><label for="pa-nm">Contact name</label><input id="pa-nm" name="name" autocomplete="name" required><span class="err" id="pa-nm-err" aria-live="polite"></span></div>
+        <div class="f"><label for="pa-em">Email</label><input id="pa-em" name="email" type="email" autocomplete="email" required><span class="err" id="pa-em-err" aria-live="polite"></span></div>
+        <div class="f"><label for="pa-ph">Phone <small>(optional)</small></label><input id="pa-ph" name="phone" type="tel" autocomplete="tel"></div>
+        <div class="f"><label for="pa-years">Years in business <small>(optional)</small></label><input id="pa-years" name="years" type="number" min="0" max="200" inputmode="numeric"></div>
+        <div class="f"><label for="pa-crew">Crew size <small>(optional)</small></label><input id="pa-crew" name="crew" type="number" min="0" max="100000" inputmode="numeric"></div>
+      </div>
+      <div class="f full" data-require-one="trades"><span class="lab" id="trades-l">Trades you perform</span>
+        <p class="hint" id="trades-hint" style="margin:6px 0 10px;font-size:13.5px;color:var(--muted)">Search and choose every trade your business actually performs. If you only supply materials, you can skip this and describe your catalog under capabilities.</p>
+        <div class="trade-picker" data-trade-picker data-name="trades" data-labelledby="trades-l"></div>
+        <span class="err" id="trades-err" aria-live="polite"></span>
+      </div>
+      <div class="f full" data-require-regions><span class="lab" id="regions-l">States you cover</span>
+        <div class="checks regions" role="group" aria-labelledby="regions-l">
+          <label><input type="checkbox" name="regions" value="WA">Washington</label>
+          <label><input type="checkbox" name="regions" value="OR">Oregon</label>
+          <label><input type="checkbox" name="regions" value="ID">Idaho</label>
+          <label><input type="checkbox" name="regions" value="CA">Northern California</label>
+        </div>
+        <span class="err" id="regions-err" aria-live="polite"></span>
+      </div>
+      <div class="f full"><label for="pa-caps">Capabilities</label>
+        <span class="hint" id="pa-caps-hint" style="display:block;margin:6px 0 8px;font-size:13.5px;color:var(--muted)">The work you actually perform, typical project size, availability and any limits. Vendors can describe products, lead times and ordering contacts.</span>
+        <textarea id="pa-caps" name="capabilities" required minlength="10" maxlength="3000" aria-describedby="pa-caps-hint pa-caps-err" rows="5"></textarea>
+        <span class="err" id="pa-caps-err" aria-live="polite"></span>
+      </div>
+      <p class="notice" data-form-status role="alert" hidden></p>
+      <div style="margin-top:8px"><button class="btn" type="submit">Send application</button></div>
+      <p class="note" style="margin-top:16px">Application or approval does not guarantee work. Assignments depend on scope, location, availability and applicable qualifications.</p>
+    </form>
+    <div class="done-msg" data-form-done hidden tabindex="-1" role="status">
+      <h3>Open your email app to finish.</h3>
+      <p data-done-body style="color:var(--muted)">Your email app should open with the application filled in. Send that message to finish. If it did not open, email office@ivoservgroup.com.</p>
+    </div>
+  </div>
   </div>
 </section>
 
@@ -167,7 +213,7 @@
         <p style="margin-top:18px;max-width:300px">One call. Every solution. Family-owned commercial construction &amp; property services for Washington, Oregon, Idaho and Northern California.</p></div>
       <div><h5>Services</h5><ul><li><a href="../commercial-construction/">Commercial Construction</a></li><li><a href="../property-services/">Property Services</a></li><li><a href="../emergency-property-response/">Emergency Property Response</a></li><li><a href="../specialty-services/">Specialty Services</a></li></ul></div>
       <div><h5>Explore IVO</h5><ul><li><a href="../">Home</a></li><li><a href="../our-work/">Our Work</a></li><li><a href="../about-ivo/">About IVO</a></li><li><a href="../about-ivo/#who-we-work-with">Who we work with</a></li><li><a href="../about-ivo/#service-area">Service area</a></li><li><a href="../partner-with-ivo/">Partner With IVO</a></li><li><a href="../how-to-work-with-ivo/">How to work with IVO</a></li><li><a href="../our-apps/">Our apps</a></li><li><a href="../how-to-work-with-ivo/#faq">FAQ</a></li></ul></div>
-      <div><h5>Start a conversation</h5><ul><li><a href="../#request">Start a request</a></li><li><a href="tel:+12065399549">(206) 539-9549</a></li><li><a href="mailto:office@ivoservgroup.com">office@ivoservgroup.com</a></li><li><a href="mailto:bid@ivoservgroup.com">bid@ivoservgroup.com</a></li><li><a href="../portal/">Portal sign-in</a></li><li><a href="https://valsergeev1.github.io/ivo-platform-prototype/v3/apply/" target="_blank" rel="noopener">Contractor &amp; vendor application ↗</a></li></ul></div>
+      <div><h5>Start a conversation</h5><ul><li><a href="../#request">Start a request</a></li><li><a href="tel:+12065399549">(206) 539-9549</a></li><li><a href="mailto:office@ivoservgroup.com">office@ivoservgroup.com</a></li><li><a href="mailto:bid@ivoservgroup.com">bid@ivoservgroup.com</a></li><li><a href="../portal/">Portal sign-in</a></li><li><a href="#apply">Contractor &amp; vendor application</a></li></ul></div>
     </div>
     <div class="foot-bot"><span>© 2026 IVO Group. Commercial Construction &amp; Property Services · Washington · Oregon · Idaho · Northern California</span></div>
   </div>
@@ -181,6 +227,8 @@
 </nav>
 <!-- mcall kept as fallback; hidden by CSS -->
 <div class="mcall"><a href="tel:+12065399549">Call</a><a href="../#request">Start a request</a></div>
+<script>window.IVO_FORM_ENDPOINT = "mailto:val@ivoservgroup.com";</script>
+<script src="../assets/js/trades.js?v=trades1" defer></script>
 <script src="../assets/js/site.js?v=prod2" defer></script>
 </body>
 </html>
