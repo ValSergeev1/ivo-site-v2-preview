@@ -67,18 +67,39 @@ if('IntersectionObserver' in window){
 }else{
   $$('video[data-poster]').forEach(v=>{if(!v.getAttribute('poster')) v.setAttribute('poster', v.getAttribute('data-poster'));});
 }
-// request form (preview only; posts nowhere). Lives on the home page only.
+// request form. Lives on the home page only.
+// Sending is off until window.IVO_FORM_ENDPOINT is set to a handler URL or a mailto: address.
 const f=$('#reqForm');if(!f)return;
 {const q=new URLSearchParams(location.search),sv=q.get('service'),ur=q.get('priority');
  if(sv){const i=f.querySelector(`input[name=svc][value="${CSS.escape(sv)}"]`);if(i)i.checked=true}
  if(ur){const i=f.querySelector(`input[name=urg][value="${CSS.escape(ur)}"]`);if(i)i.checked=true}}
 const steps=$$('fieldset',f),prog=$$('.req-prog span',f),prev=$('#prevBtn'),next=$('#nextBtn'),lbl=$('#stepLbl');
-let cur=0;const files=[];
+const doneMsg=$('#doneMsg'),doneTitle=$('#doneTitle'),doneBody=$('#doneBody'),formAlert=$('#formAlert'),formNav=$('#formNav');
+let cur=0;const files=[];let sending=false;
+function formEndpoint(){return String(window.IVO_FORM_ENDPOINT||"").trim()}
+function hideAlert(){if(formAlert){formAlert.hidden=true;formAlert.textContent=""}}
+function showAlert(msg){
+  if(!formAlert)return;
+  formAlert.hidden=false;
+  formAlert.textContent=msg;
+  formAlert.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function showDone(title,body){
+  hideAlert();
+  steps.forEach(s=>s.hidden=true);
+  if(formNav)formNav.hidden=true;
+  const bar=$('.req-prog',f);if(bar)bar.hidden=true;
+  if(doneTitle)doneTitle.textContent=title;
+  if(doneBody)doneBody.textContent=body;
+  if(doneMsg)doneMsg.hidden=false;
+  if(doneMsg)doneMsg.scrollIntoView({behavior:'smooth',block:'start'});
+}
 function render(){
   steps.forEach((s,i)=>s.hidden=i!==cur);
   prog.forEach((p,i)=>{p.className=i===cur?'on':i<cur?'done':''});
   prev.style.visibility=cur?'visible':'hidden';
-  next.textContent=cur===steps.length-1?'Submit request (preview)':'Continue →';
+  next.disabled=sending;
+  next.textContent=sending?'Sending…':(cur===steps.length-1?'Submit request':'Continue →');
   lbl.textContent=`Step ${cur+1} of ${steps.length}`;
   if(cur===3)buildReview();
 }
@@ -91,14 +112,86 @@ function buildReview(){
   const d=new FormData(f),rows=[['Requester',`${d.get('name')||'—'} · ${d.get('role')}`],['Property',d.get('address')||'—'],['Type',`${d.get('ptype')} · ${d.get('occ')}`],['Service',d.get('svc')],['Priority',d.get('urg')],['Budget',d.get('budget')],['Timing',d.get('timing')],['Files',files.length?files.length+' attached':'None yet']];
   $('#review').innerHTML=rows.map(([k,v])=>`<div><dt>${k}</dt><dd>${String(v).replace(/</g,'&lt;')}</dd></div>`).join('');
 }
+function requestPayload(){
+  const data=new FormData(f);
+  if(!data.get('smsUpdates')) data.set('smsUpdates','no');
+  files.forEach(file=>data.append('files',file,file.name));
+  data.set('source',location.href);
+  data.set('form','ivo-service-request');
+  return data;
+}
+function requestSummary(data){
+  const lines=[
+    'IVO service request',
+    `Name: ${data.get('name')||''}`,
+    `Role: ${data.get('role')||''}`,
+    `Company: ${data.get('company')||''}`,
+    `Email: ${data.get('email')||''}`,
+    `Phone: ${data.get('phone')||''}`,
+    `Address: ${data.get('address')||''}`,
+    `Property type: ${data.get('ptype')||''}`,
+    `Occupancy: ${data.get('occ')||''}`,
+    `Access notes: ${data.get('access')||''}`,
+    `Service: ${data.get('svc')||''}`,
+    `Priority: ${data.get('urg')||''}`,
+    `Description: ${data.get('desc')||''}`,
+    `Budget: ${data.get('budget')||''}`,
+    `Timing: ${data.get('timing')||''}`,
+    `Text updates: ${data.get('smsUpdates')||'no'}`,
+    `Files attached in the form: ${files.length}`
+  ];
+  return lines.join('\n');
+}
+async function submitRequest(){
+  if(sending)return;
+  const endpoint=formEndpoint();
+  const data=requestPayload();
+  const email=data.get('email')||'the email you entered';
+  if(!endpoint){
+    showDone(
+      'This form is not sending yet.',
+      'Until a destination is connected, please call (206) 539-9549 or email office@ivoservgroup.com with the details you entered. If this is an emergency, please call — a form does not dispatch a crew.'
+    );
+    return;
+  }
+  if(/^mailto:/i.test(endpoint)){
+    const addr=endpoint.replace(/^mailto:/i,'').split('?')[0];
+    const subject=encodeURIComponent('IVO service request');
+    let body=requestSummary(data);
+    if(files.length) body+='\n\nPhotos and files could not be included in this email. Please attach them in a follow-up.';
+    window.location.href=`mailto:${addr}?subject=${subject}&body=${encodeURIComponent(body)}`;
+    showDone(
+      'Your email app should open next.',
+      `If it does not, send the same information to ${addr}. Photos and files are not attached automatically — please include them in the email. If this is an emergency, call (206) 539-9549.`
+    );
+    return;
+  }
+  sending=true;render();hideAlert();
+  try{
+    const res=await fetch(endpoint,{method:'POST',body:data});
+    if(!res.ok) throw new Error(String(res.status));
+    sending=false;
+    showDone(
+      'Request received.',
+      `Thank you. We will follow up at ${email}. If this is an emergency, please call (206) 539-9549 now — a form does not dispatch a crew.`
+    );
+  }catch(err){
+    sending=false;render();
+    showAlert('We could not send this just now. Call (206) 539-9549 or email office@ivoservgroup.com, and you can try the form again.');
+  }
+}
 next.addEventListener('click',()=>{
   if(!valid())return;
   if(cur<steps.length-1){cur++;render();f.scrollIntoView({behavior:'smooth',block:'start'});return}
-  steps.forEach(s=>s.hidden=true);$('#formNav').hidden=true;$('.req-prog',f).hidden=true;$('#doneMsg').hidden=false;
-  $('#refNo').textContent='Preview reference: IVO-'+Date.now().toString(36).toUpperCase().slice(-6);
+  submitRequest();
 });
 prev.addEventListener('click',()=>{if(cur){cur--;render()}});
-$('#resetForm').addEventListener('click',()=>{f.reset();files.length=0;$('#files').innerHTML='';cur=0;$('#doneMsg').hidden=true;$('#formNav').hidden=false;$('.req-prog',f).hidden=false;render();emChk()});
+$('#resetForm').addEventListener('click',()=>{
+  f.reset();files.length=0;$('#files').innerHTML='';cur=0;sending=false;hideAlert();
+  if(doneMsg)doneMsg.hidden=true;if(formNav)formNav.hidden=false;
+  const bar=$('.req-prog',f);if(bar)bar.hidden=false;
+  render();emChk();
+});
 // emergency alert
 function emChk(){const e=f.querySelector('input[name=urg]:checked')?.value==='Emergency'||f.querySelector('input[name=svc]:checked')?.value==='Emergency response';$('#emAlert').classList.toggle('show',e)}
 $$('input[name=urg],input[name=svc]',f).forEach(i=>i.addEventListener('change',emChk));

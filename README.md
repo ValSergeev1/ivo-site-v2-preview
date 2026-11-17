@@ -1,27 +1,18 @@
-# IVO Group website, preview v2
+# IVO Group website
 
-Static multi-page preview of a redesigned ivoservgroup.com. It does not replace the live site.
+Marketing site for [ivoservgroup.com](https://ivoservgroup.com). Static HTML, CSS and JavaScript, served by nginx.
 
-Pages (one folder each, URLs mirror the live site): `/`, `/commercial-construction/`, `/property-services/`,
-`/emergency-property-response/`, `/specialty-services/`, `/industries/`, `/our-work/`, `/about-ivo/`,
-`/partner-with-ivo/`, `/how-to-work-with-ivo/`, `/portal-walkthrough/`.
+Pages: `/`, `/commercial-construction/`, `/property-services/`, `/emergency-property-response/`, `/specialty-services/`, `/our-work/`, `/about-ivo/`, `/how-to-work-with-ivo/`, `/our-apps/`, `/partner-with-ivo/`, `/portal/`.
 
-- Shared styles/scripts: `assets/css/site.css`, `assets/js/site.js`
+- Shared styles and scripts: `assets/css/site.css`, `assets/js/site.js`
 - The four-step request form lives only on the home page (`/#request`); every page links to it.
   Links can preselect the form with `?service=` / `?priority=` (e.g. `/?service=Emergency%20response&priority=Emergency#request`).
-- Hero video: `assets/video/ivo-hero-1080.mp4` / `-720.mp4` + `ivo-hero-poster.jpg` (21 s loop)
-- Explainer video: `assets/video/ivo-explainer.mp4` with English captions `ivo-explainer.vtt` and `ivo-explainer-poster.jpg`, embedded on `/how-to-work-with-ivo/` (#explainer) and the home page.
-- Subpage copy is based on the live pages, rewritten into the v2 layout. Licensing details and numeric claims are removed.
-- Photos and logo mark come from the current ivoservgroup.com
-- The request form is UI only and posts nowhere
-- Testimonials are SAMPLES (marked) to be replaced with real client quotes
-- Response-time targets are proposed values for the owner to confirm
-- `noindex` is set on every page so search engines skip the preview
+- To start sending requests, set `window.IVO_FORM_ENDPOINT` in `index.html` to a form-handler URL, or to a `mailto:` address such as `mailto:office@ivoservgroup.com`. Until that value is set, the form shows a clear message and does not pretend a request was sent.
+- Hero video: `assets/video/ivo-hero-1080.mp4` / `-720.mp4` + `ivo-hero-poster.jpg`
+- Explainer video: `assets/video/ivo-explainer.mp4` with English captions `ivo-explainer.vtt` and `ivo-explainer-poster.jpg`, on `/how-to-work-with-ivo/` (#explainer) and the home page.
+- Partner application and portal sign-in currently open the IVO platform prototype on GitHub Pages, until the live apps are hosted on IVO's domain.
+- Canonical, Open Graph and sitemap URLs use `https://ivoservgroup.com/`.
 
-## Cloud Run test container
+## Container
 
-`Dockerfile`, `nginx.conf`, and `.dockerignore` build a small nginx container for a test
-deploy of this preview on Google Cloud Run (`ivo-website` in `us-west1`). The container
-listens on port 8080, keeps `noindex`, and 301s the old `/portal-walkthrough`, `/faq`,
-`/service-area`, and `/industries` paths to their current anchors. It does not map a
-custom domain. See the Dockerfile and nginx.conf for the exact settings.
+`Dockerfile`, `nginx.conf`, and `.dockerignore` build an nginx container for Cloud Run (`ivo-website` in `us-west1`). The container listens on port 8080 and 301s the old `/portal-walkthrough`, `/faq`, `/service-area`, and `/industries` paths to their current anchors. The older `/v3/` tree is retained but not indexed. Domain mapping is handled separately and is not part of this repository.
