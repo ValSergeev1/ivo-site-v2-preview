@@ -830,3 +830,5 @@ html.page-leave body{opacity:0;transition:opacity .18s ease}
 .legal p,.legal li{line-height:1.65}
 .legal ul,.legal ol{padding-left:1.25rem;margin:0 0 1rem}
 .legal li{margin:.4rem 0}
+.legal .note-draft{border:2px dashed #c9a25a;background:#fff8ea;border-radius:12px;padding:14px 18px;margin:0 0 1.5rem}
+.legal .note-draft p{margin:0}
