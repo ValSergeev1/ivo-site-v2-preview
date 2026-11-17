@@ -1,5 +1,4 @@
+# Official site: https://ivoservgroup.com/
+# This GitHub Pages copy is a review preview and must not be indexed.
 User-agent: *
-Allow: /
-Disallow: /v3/
-
-Sitemap: https://ivoservgroup.com/sitemap.xml
+Disallow: /
