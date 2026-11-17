@@ -78,8 +78,10 @@ section{padding:112px 0}
 .hero-poster{z-index:0}
 .hero video{z-index:1}
 .hero::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:
-  linear-gradient(90deg,rgba(6,29,42,.96) 0%,rgba(6,29,42,.9) 36%,rgba(6,29,42,.7) 62%,rgba(6,29,42,.55) 100%),
-  linear-gradient(180deg,rgba(6,29,42,.45) 0%,rgba(6,29,42,.2) 28%,rgba(6,29,42,.82) 100%)}
+  radial-gradient(105% 70% at 23% 59%,rgba(6,29,42,.80) 0%,rgba(6,29,42,.68) 44%,rgba(6,29,42,.28) 78%,rgba(6,29,42,.04) 100%),
+  linear-gradient(90deg,rgba(6,29,42,.62) 0%,rgba(6,29,42,.30) 40%,rgba(6,29,42,0) 72%),
+  linear-gradient(180deg,rgba(6,29,42,.28) 0%,rgba(6,29,42,0) 22%,rgba(6,29,42,0) 70%,rgba(6,29,42,.42) 100%)}
+.hero .eyebrow{color:#f2e4cb}
 .hero video,.hero-poster{z-index:0}
 .hero .wrap{z-index:3}
 .hero h1,.hero .sub{color:#fff;text-shadow:0 2px 28px rgba(6,29,42,.85)}
