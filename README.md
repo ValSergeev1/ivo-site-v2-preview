@@ -17,3 +17,11 @@ Pages (one folder each, URLs mirror the live site): `/`, `/commercial-constructi
 - Testimonials are SAMPLES (marked) to be replaced with real client quotes
 - Response-time targets are proposed values for the owner to confirm
 - `noindex` is set on every page so search engines skip the preview
+
+## Cloud Run test container
+
+`Dockerfile`, `nginx.conf`, and `.dockerignore` build a small nginx container for a test
+deploy of this preview on Google Cloud Run (`ivo-website` in `us-west1`). The container
+listens on port 8080, keeps `noindex`, and 301s the old `/portal-walkthrough`, `/faq`,
+`/service-area`, and `/industries` paths to their current anchors. It does not map a
+custom domain. See the Dockerfile and nginx.conf for the exact settings.
