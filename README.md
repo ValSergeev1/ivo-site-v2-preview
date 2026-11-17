@@ -15,4 +15,4 @@ Pages: `/`, `/commercial-construction/`, `/property-services/`, `/emergency-prop
 
 ## Container
 
-`Dockerfile`, `nginx.conf`, and `.dockerignore` build an nginx container for Cloud Run (`ivo-website` in `us-west1`). The container listens on port 8080 and 301s the old `/portal-walkthrough`, `/faq`, `/service-area`, and `/industries` paths to their current anchors. The older `/v3/` tree is retained but not indexed. Domain mapping is handled separately and is not part of this repository.
+`Dockerfile`, `nginx.conf`, and `.dockerignore` build an nginx container for Cloud Run (`ivo-website` in `us-west1`). The container listens on port 8080 and 301s retired paths to the current pages, including `/portal-walkthrough`, `/faq`, `/service-area`, `/industries`, old ChatGPT-site `/p_*.html` URLs, `/contact`, `/start-request`, `/request-bid`, and `/contractor-vendor-application`. The older `/v3/` tree is retained but not indexed. The GitHub Pages copy of this repo is published from the `gh-pages` branch with noindex tags so it is not confused with the live site. Domain mapping is handled separately and is not part of this repository.
