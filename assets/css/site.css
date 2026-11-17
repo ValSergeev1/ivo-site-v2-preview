@@ -830,3 +830,125 @@ html.page-leave body{opacity:0;transition:opacity .18s ease}
 .legal p,.legal li{line-height:1.65}
 .legal ul,.legal ol{padding-left:1.25rem;margin:0 0 1rem}
 .legal li{margin:.4rem 0}
+
+/* ===== Mobile cleanup (phones only, <=600px). Desktop and tablet layouts are untouched. ===== */
+.m-only{display:none}
+@media (max-width:600px){
+  .m-only{display:flex}
+
+  /* Swipe rows: keep the 20px gutter when a row snaps, so the first card no longer sits flush on the screen edge */
+  .svc-grid,.model-grid,.ind-grid,.role-grid,.rel-grid,.net-grid,.resp,.work-grid,.gal,.timeline,.platform-steps{scroll-padding-inline:20px}
+  .timeline,.platform-steps{margin-left:-20px;margin-right:-20px;padding-left:20px;padding-right:20px}
+
+  /* An industry card is one card, not a row of its own (it was squeezing title and text into narrow columns) */
+  .ind{display:block!important;overflow:visible;margin:0!important;padding:22px 20px!important;scroll-snap-type:none;border:1px solid var(--line);background:#fff}
+  .ind-grid{background:none;border:0}
+  .ind .n{display:none}
+  .ind h3{margin:0 0 8px;font-size:19px}
+  .ind p{font-size:14px;line-height:1.55}
+
+  /* Quick-facts band: the strip lost its side padding */
+  .facts .wrap{padding:0 20px!important;border-top:0}
+  .facts .wrap>div{padding:12px 0!important}
+  .facts .wrap>div:first-child{border-top:0}
+  .facts b{font-size:15px}
+
+  /* Hero: one clear column of actions, response commitments as a short list */
+  .hero .ctas,.phero .ctas{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:28px}
+  .phero .ctas{margin-bottom:0}
+  .hero .ctas .btn,.phero .ctas .btn{justify-content:center;width:100%;padding:12px 18px}
+  .hero h1{margin-bottom:20px}
+  .hero p.lead,.phero .lead{margin-bottom:24px}
+  .hero-sla,.phero .hero-sla{display:block;overflow:visible;margin-top:24px}
+  .hero-sla div{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:10px 0!important;border-right:0!important;border-bottom:1px solid #ffffff1a}
+  .hero-sla div:last-child{border-bottom:0}
+  .hero-sla small{flex:none}
+  .hero-sla strong{margin-top:0;font-size:15px;text-align:right}
+  .hero .wrap{padding-bottom:64px}
+  .vid-toggle{right:20px;bottom:16px}
+
+  /* Home promise strip: a labelled, stacked list instead of a swipe row with loose numbers */
+  .region{padding:16px 0}
+  .region .wrap{gap:4px 12px;font-size:14px}
+  .promise{padding:40px 0 8px}
+  .promise .eyebrow{margin-bottom:12px;color:var(--gold-ink)}
+  .promise-grid{display:block!important;overflow:visible;margin:0!important;padding:0!important;border-bottom:0}
+  .promise-grid div{padding:14px 0!important;border-bottom:1px solid var(--line)!important}
+  .promise-grid i{display:none}
+  .promise-grid h4{margin:0 0 4px}
+
+  /* "How IVO operates" roles: real cards on the dark band */
+  .model-grid{border-top:0;margin-top:0}
+  .model-grid article,.model-grid article+article{background:var(--navy2);border:1px solid #ffffff1c!important;padding:22px 20px 14px!important}
+  .model-grid h3{margin:8px 0 10px;font-size:22px}
+  .model-grid ul{margin-top:12px}
+
+  /* Cards in swipe rows */
+  .svc .bd{padding:18px 18px 20px;gap:10px}
+  .role{padding:22px 20px}
+  .rel div{padding:18px 18px 20px}
+  .tier{padding:22px 20px}
+
+  /* Service areas: four short rows instead of a swipe row */
+  .areas{display:block!important;overflow:visible;margin:8px 0 0!important;padding:0!important;background:none}
+  .areas div{padding:14px 0!important;border-top:1px solid #ffffff1c}
+  .areas h3{font-size:18px;margin-bottom:4px}
+  .area-list div{padding:14px 0}
+
+  /* Photos keep their shape instead of stretching to the image file height */
+  .split-img img,.about-img img{height:auto;aspect-ratio:4/3}
+  .about-img .cap{position:static;max-width:none;padding:14px 16px}
+  .split-img .cap{bottom:12px}
+
+  /* Step lists: a compact numbered list rather than a tall stack of boxes */
+  .path{gap:0;border-left:1px solid var(--line);margin-left:6px}
+  .path li{background:none!important;border:0!important;padding:0 0 18px 20px!important}
+  .path li:last-child{padding-bottom:0!important}
+  .path li::before{margin-bottom:4px}
+  .dark .path{border-left-color:#ffffff22}
+  .path h3{font-size:17px;margin-bottom:4px}
+  .path p{font-size:14px;line-height:1.5}
+  .steps li{padding-top:14px}
+  .steps h4{margin-bottom:4px}
+
+  /* Explainer: heading first, then the video it describes */
+  .ex-grid.sm{gap:18px;margin-top:40px;padding-top:32px}
+  .ex-grid.sm>div:last-child{order:-1}
+
+  /* Heavy decoration off on small screens */
+  .emergency::after{display:none}
+  .em-grid{gap:28px}
+
+  /* Product mock-ups: smaller phone frame so the copy stays in view */
+  .device{width:min(100%,232px)}
+  .platform .sec-head{margin-bottom:20px}
+  .plat-cap{margin-top:12px}
+  .platform-side{padding-top:0}
+
+  /* Accordions: drop the decorative numbers in front of questions */
+  .det-acc summary small{display:none}
+
+  /* "Read more" detail collapse (built by site.js on phones) */
+  details.m-more{border:0;margin-top:12px}
+  details.m-more:last-child{border-bottom:0}
+  details.m-more>summary{padding:10px 32px 10px 0;font-size:14px;color:var(--gold-ink);min-height:44px;display:flex;align-items:center}
+  details.m-more>summary::after{top:6px;font-size:22px}
+  details.m-more>p{padding:0;font-size:15px}
+  details.m-more>p+p{margin-top:12px}
+  .dark details.m-more>summary,.scenario details.m-more>summary{color:var(--gold-l)}
+
+  /* Tap targets: inline arrow links and footer links */
+  .link{min-height:44px}
+  footer.site li{padding:0}
+  footer.site li a{display:inline-flex;align-items:center;min-height:40px}
+
+  /* Footer: two columns of links under the brand */
+  footer.site{padding:44px 0 20px}
+  .foot-grid{grid-template-columns:1fr 1fr;gap:24px 16px}
+  .foot-grid>div:first-child,.foot-grid>div:last-child{grid-column:1/-1}
+  footer.site h5{margin-bottom:6px}
+  .foot-bot{margin-top:28px}
+
+  /* CTA band */
+  .cta .wrap{gap:20px}
+}

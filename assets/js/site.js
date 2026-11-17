@@ -288,3 +288,25 @@ render();emChk();
     setTimeout(() => { location.href = a.href; }, 180);
   });
 })();
+// Phones: long supporting paragraphs collapse under "Learn more"; the lead line stays visible.
+(()=>{
+  const mq=matchMedia('(max-width:600px)');
+  const hosts=[...document.querySelectorAll('.split>div:not(.split-img),.det')];
+  function wrap(){
+    hosts.forEach(h=>{
+      if(h.querySelector(':scope>details.m-more'))return;
+      const lead=h.querySelector(':scope>p.lead');if(!lead)return;
+      const ps=[...h.querySelectorAll(':scope>p:not(.lead)')].filter(p=>!p.classList.contains('more-row'));
+      if(!ps.length||ps.reduce((n,p)=>n+p.textContent.length,0)<160)return;
+      const d=document.createElement('details');d.className='m-more';
+      const s=document.createElement('summary');s.textContent='Learn more';d.appendChild(s);
+      ps[0].before(d);ps.forEach(p=>d.appendChild(p));
+    });
+  }
+  function unwrap(){
+    document.querySelectorAll('details.m-more').forEach(d=>{[...d.querySelectorAll(':scope>p')].forEach(p=>d.before(p));d.remove();});
+  }
+  const apply=()=>mq.matches?wrap():unwrap();
+  apply();
+  if(mq.addEventListener)mq.addEventListener('change',apply);
+})();
