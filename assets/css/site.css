@@ -379,7 +379,7 @@ footer.site .brand .wm b{color:#fff}footer.site .brand .wm span{color:#8fa4b2}
   fieldset{padding:24px 20px}.form-nav{padding:16px 20px}
   .req-prog span{font-size:10.5px;padding:12px 8px}
   .mock .body{grid-template-columns:1fr}.mock aside{display:none}.mock .cards{grid-template-columns:1fr}
-  .hero{min-height:auto}.hero .wrap{padding-top:72px}.vid-toggle{display:none}
+  .hero{min-height:auto}.hero .wrap{padding-top:72px}
   .foot-grid{grid-template-columns:1fr}
   .brand .wm b{font-size:22px}
   .mcall{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--navy);border-top:1px solid #ffffff22}
@@ -709,7 +709,7 @@ body.menu-open header.site{z-index:75}
 
 @media (max-width:700px){
   .hero{min-height:0!important;height:auto;background-image:url(../video/ivo-hero-poster-m.jpg)}
-  .hero video{display:none}
+  .vid-toggle{right:16px;bottom:16px;padding:10px 12px}
 }
 
 @media (max-width:600px){

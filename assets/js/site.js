@@ -22,14 +22,31 @@ if(hdr){
   const onScroll=()=>hdr.classList.toggle('is-scrolled',window.scrollY>8);
   onScroll();window.addEventListener('scroll',onScroll,{passive:true});
 }
-// hero video: play only on larger screens, and never when the user prefers less motion
+// hero video: play on all screen sizes unless the user prefers less motion
 const v=$('#heroVid'),vb=$('#vidToggle');
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const small=matchMedia('(max-width:700px)').matches;
-if(v){
-  if(!(reduce||small)){v.play().catch(()=>{});}
+function syncVidBtn(){
+  if(!vb)return;
+  if(v.paused){vb.textContent='▶ Play video';vb.setAttribute('aria-pressed','true')}
+  else{vb.textContent='❚❚ Pause video';vb.setAttribute('aria-pressed','false')}
 }
-if(v&&vb)vb.addEventListener('click',()=>{if(v.paused){v.play();vb.textContent='❚❚ Pause video';vb.setAttribute('aria-pressed','false')}else{v.pause();vb.textContent='▶ Play video';vb.setAttribute('aria-pressed','true')}});
+function playHero(){return v.play().then(syncVidBtn,syncVidBtn)}
+if(v){
+  if(reduce){syncVidBtn()}
+  else{
+    const start=()=>{if(v.paused)playHero()};
+    requestAnimationFrame(()=>{
+      requestAnimationFrame(()=>{
+        v.preload='auto';
+        if(v.readyState>=3)start();
+        else v.addEventListener('canplay',start,{once:true});
+        const idle=window.requestIdleCallback||(cb=>setTimeout(cb,1));
+        idle(start);
+      });
+    });
+  }
+}
+if(v&&vb)vb.addEventListener('click',()=>{if(v.paused)playHero();else{v.pause();syncVidBtn()}});
 // reveal
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'});
 $$('.rv').forEach(el=>io.observe(el));
