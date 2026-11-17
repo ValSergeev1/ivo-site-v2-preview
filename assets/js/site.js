@@ -68,7 +68,7 @@ if('IntersectionObserver' in window){
   $$('video[data-poster]').forEach(v=>{if(!v.getAttribute('poster')) v.setAttribute('poster', v.getAttribute('data-poster'));});
 }
 // request form. Lives on the home page only.
-// Sending is off until window.IVO_FORM_ENDPOINT is set to a handler URL or a mailto: address.
+// Sending uses window.IVO_FORM_ENDPOINT: a handler URL, or a mailto: address.
 const f=$('#reqForm');if(!f)return;
 {const q=new URLSearchParams(location.search),sv=q.get('service'),ur=q.get('priority');
  if(sv){const i=f.querySelector(`input[name=svc][value="${CSS.escape(sv)}"]`);if(i)i.checked=true}
@@ -120,27 +120,45 @@ function requestPayload(){
   data.set('form','ivo-service-request');
   return data;
 }
+function field(data,key){const v=data.get(key);return (v==null||String(v).trim()==="")?"(not provided)":String(v).trim()}
+function requestSubject(data){
+  const name=field(data,'name');
+  const company=field(data,'company');
+  if(company==="(not provided)") return `IVO service request – ${name}`;
+  return `IVO service request – ${name} – ${company}`;
+}
 function requestSummary(data){
+  const fileNote=files.length
+    ? `${files.length} selected on the form (please attach ${files.length===1?"it":"them"} in your email app before sending)`
+    : "None selected on the form (please attach any photos, plans or files in your email app before sending)";
   const lines=[
-    'IVO service request',
-    `Name: ${data.get('name')||''}`,
-    `Role: ${data.get('role')||''}`,
-    `Company: ${data.get('company')||''}`,
-    `Email: ${data.get('email')||''}`,
-    `Phone: ${data.get('phone')||''}`,
-    `Address: ${data.get('address')||''}`,
-    `Property type: ${data.get('ptype')||''}`,
-    `Occupancy: ${data.get('occ')||''}`,
-    `Access notes: ${data.get('access')||''}`,
-    `Service: ${data.get('svc')||''}`,
-    `Priority: ${data.get('urg')||''}`,
-    `Description: ${data.get('desc')||''}`,
-    `Budget: ${data.get('budget')||''}`,
-    `Timing: ${data.get('timing')||''}`,
-    `Text updates: ${data.get('smsUpdates')||'no'}`,
-    `Files attached in the form: ${files.length}`
+    "IVO service request",
+    "",
+    "Requester",
+    `Name: ${field(data,"name")}`,
+    `I am a: ${field(data,"role")}`,
+    `Company: ${field(data,"company")}`,
+    `Email: ${field(data,"email")}`,
+    `Phone: ${field(data,"phone")}`,
+    "",
+    "Property",
+    `Address: ${field(data,"address")}`,
+    `Property type: ${field(data,"ptype")}`,
+    `Occupancy during work: ${field(data,"occ")}`,
+    `Access notes: ${field(data,"access")}`,
+    "",
+    "The need",
+    `Service path: ${field(data,"svc")}`,
+    `Priority: ${field(data,"urg")}`,
+    `Description: ${field(data,"desc")}`,
+    `Budget range: ${field(data,"budget")}`,
+    `Target timing: ${field(data,"timing")}`,
+    `Text me status updates: ${field(data,"smsUpdates")==="yes"?"Yes":"No"}`,
+    `Photos, plans or files: ${fileNote}`,
+    "",
+    "Source page: "+field(data,"source")
   ];
-  return lines.join('\n');
+  return lines.join("\n");
 }
 async function submitRequest(){
   if(sending)return;
@@ -156,13 +174,12 @@ async function submitRequest(){
   }
   if(/^mailto:/i.test(endpoint)){
     const addr=endpoint.replace(/^mailto:/i,'').split('?')[0];
-    const subject=encodeURIComponent('IVO service request');
-    let body=requestSummary(data);
-    if(files.length) body+='\n\nPhotos and files could not be included in this email. Please attach them in a follow-up.';
+    const subject=encodeURIComponent(requestSubject(data));
+    const body=requestSummary(data);
     window.location.href=`mailto:${addr}?subject=${subject}&body=${encodeURIComponent(body)}`;
     showDone(
       'Your email app should open next.',
-      `If it does not, send the same information to ${addr}. Photos and files are not attached automatically — please include them in the email. If this is an emergency, call (206) 539-9549.`
+      `Please attach any photos, plans or files in your email app before you send — they are not included automatically. If the message does not open, send the same information to ${addr} and attach the files there. If this is an emergency, call (206) 539-9549.`
     );
     return;
   }

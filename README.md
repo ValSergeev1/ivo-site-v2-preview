@@ -7,7 +7,7 @@ Pages: `/`, `/commercial-construction/`, `/property-services/`, `/emergency-prop
 - Shared styles and scripts: `assets/css/site.css`, `assets/js/site.js`
 - The four-step request form lives only on the home page (`/#request`); every page links to it.
   Links can preselect the form with `?service=` / `?priority=` (e.g. `/?service=Emergency%20response&priority=Emergency#request`).
-- To start sending requests, set `window.IVO_FORM_ENDPOINT` in `index.html` to a form-handler URL, or to a `mailto:` address such as `mailto:office@ivoservgroup.com`. Until that value is set, the form shows a clear message and does not pretend a request was sent.
+- The home-page request form opens an email to `val@ivoservgroup.com` (`window.IVO_FORM_ENDPOINT` in `index.html`). Change that value to a form-handler URL or a different `mailto:` address if the destination changes.
 - Hero video: `assets/video/ivo-hero-1080.mp4` / `-720.mp4` + `ivo-hero-poster.jpg`
 - Explainer video: `assets/video/ivo-explainer.mp4` with English captions `ivo-explainer.vtt` and `ivo-explainer-poster.jpg`, on `/how-to-work-with-ivo/` (#explainer) and the home page.
 - Partner application and portal sign-in currently open the IVO platform prototype on GitHub Pages, until the live apps are hosted on IVO's domain.
