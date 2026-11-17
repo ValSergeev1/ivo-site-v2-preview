@@ -262,3 +262,5 @@ a.fine,.submit-row .fine a{display:inline-flex;align-items:center;min-height:var
 @media (max-width:760px){
   .trade-list{max-height:min(55vh, 460px)}
 }
+
+.trade-hidden{display:none}

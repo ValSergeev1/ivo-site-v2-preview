@@ -821,3 +821,5 @@ html.page-leave body{opacity:0;transition:opacity .18s ease}
   .partner-apply{padding:24px 18px;margin-top:32px}
   .partner-form .fg{grid-template-columns:1fr}
 }
+
+.trade-hidden{display:none}

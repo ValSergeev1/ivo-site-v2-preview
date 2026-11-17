@@ -360,11 +360,28 @@
     list.setAttribute("role", "group");
     list.setAttribute("aria-labelledby", el.getAttribute("data-labelledby") || "");
 
-    function selected(){
-      return $$("input[name='"+name+"']:checked", list).map(i => i.value);
+    const hidden = document.createElement("div");
+    hidden.className = "trade-hidden";
+    function picked(){ return el._picked || []; }
+    function setPicked(ids){
+      const seen = new Set();
+      el._picked = ids.filter(id => LABELS[id] && !seen.has(id) && seen.add(id));
+      hidden.innerHTML = "";
+      el._picked.forEach(id => {
+        const i = document.createElement("input");
+        i.type = "hidden";
+        i.name = name;
+        i.value = id;
+        hidden.appendChild(i);
+      });
+      renderChips();
+      $$("input[type=checkbox]", list).forEach(box => {
+        box.checked = el._picked.includes(box.value);
+        box.closest("label")?.classList.toggle("on", box.checked);
+      });
     }
     function renderChips(){
-      const ids = selected();
+      const ids = picked();
       chips.innerHTML = "";
       ids.forEach(id => {
         const b = document.createElement("button");
@@ -372,10 +389,7 @@
         b.className = "trade-chip";
         b.innerHTML = (LABELS[id]||id) + ' <span aria-hidden="true">×</span>';
         b.setAttribute("aria-label", "Remove " + (LABELS[id]||id));
-        b.addEventListener("click", () => {
-          const box = list.querySelector('input[value="'+CSS.escape(id)+'"]');
-          if(box){ box.checked = false; box.dispatchEvent(new Event("change", {bubbles:true})); }
-        });
+        b.addEventListener("click", () => setPicked(ids.filter(x => x !== id)));
         chips.appendChild(b);
       });
       if(ids.length){
@@ -403,13 +417,12 @@
           lab.className = "trade-opt";
           const box = document.createElement("input");
           box.type = "checkbox";
-          box.name = name;
           box.value = id;
-          if((el._picked||[]).includes(id)) box.checked = true;
+          box.checked = picked().includes(id);
           box.addEventListener("change", () => {
-            el._picked = selected();
-            lab.classList.toggle("on", box.checked);
-            renderChips();
+            const next = new Set(picked());
+            if(box.checked) next.add(id); else next.delete(id);
+            setPicked([...next]);
             el.dispatchEvent(new Event("change", {bubbles:true}));
           });
           if(box.checked) lab.classList.add("on");
@@ -429,7 +442,8 @@
     }
     el._picked = $$("input[name='"+name+"']:checked", el).map(i => i.value);
     search.addEventListener("input", () => paint(search.value));
-    el.append(chips, search, list);
+    el.append(chips, search, list, hidden);
+    setPicked(el._picked);
     paint("");
   }
 
