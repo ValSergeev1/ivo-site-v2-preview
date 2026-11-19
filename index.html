@@ -30,7 +30,7 @@
 <meta name="twitter:description" content="One accountable contact for tenant improvements, renovations, repairs, turnovers and emergency property response across Washington, Oregon, Idaho and Northern California.">
 <meta name="twitter:image" content="https://ivoservgroup.com/assets/img/og-image.jpg">
 <link rel="canonical" href="https://ivoservgroup.com/">
-<link rel="stylesheet" href="assets/css/site.css?v=prod5">
+<link rel="stylesheet" href="assets/css/site.css?v=prod7">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": ["Organization", "LocalBusiness", "GeneralContractor"], "name": "IVO Group", "legalName": "IVO Group", "url": "https://ivoservgroup.com/", "logo": "https://ivoservgroup.com/assets/img/icon-512.png", "image": "https://ivoservgroup.com/assets/img/og-image.jpg", "telephone": "+1-206-539-9549", "email": "office@ivoservgroup.com", "areaServed": [{"@type": "State", "name": "Washington"}, {"@type": "State", "name": "Oregon"}, {"@type": "State", "name": "Idaho"}, {"@type": "AdministrativeArea", "name": "Northern California"}], "description": "Commercial construction and property services for Washington, Oregon, Idaho and Northern California."}</script>
 </head>
 <body>
@@ -276,7 +276,7 @@
     <div class="ex-grid sm">
       <div class="rv"><div class="explainer ready" id="explainer-player">
   <video controls playsinline preload="none" data-poster="assets/video/ivo-explainer-poster.jpg?v=v2d" aria-label="How IVO works: animated explainer with voice-over and subtitles">
-    <source src="assets/video/ivo-explainer.mp4?v=v2d" type="video/mp4" media="(min-width: 700px)">
+    <source src="assets/video/ivo-explainer.mp4?v=v3" type="video/mp4" media="(min-width: 700px)">
     <source src="assets/video/ivo-explainer-720.mp4?v=v2d" type="video/mp4">
     <track kind="subtitles" srclang="en" label="English" src="assets/video/ivo-explainer.vtt?v=v2d" default>
   </video>
@@ -463,6 +463,7 @@
     </div>
     <form class="req rv" id="reqForm" novalidate aria-label="Service request">
       <div class="req-prog" aria-hidden="true"><span class="on">1 · You</span><span>2 · Property</span><span>3 · The need</span><span>4 · Files &amp; send</span></div>
+      <div aria-hidden="true" style="position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden"><label for="req-website">Leave this field empty</label><input id="req-website" name="website" tabindex="-1" autocomplete="off"></div>
       <fieldset data-step="1">
         <legend>Who's making the request?</legend>
         <div class="fg">
@@ -485,7 +486,9 @@
       <fieldset data-step="2" hidden>
         <legend>Where is the property?</legend>
         <div class="fg">
-          <div class="f full"><label for="ad">Property address</label><input id="ad" name="address" autocomplete="street-address" placeholder="Street, city, state" required></div>
+          <div class="f full"><label for="ad">Property address</label><input id="ad" name="address" autocomplete="street-address" placeholder="Street address" required></div>
+          <div class="f"><label for="cy">City</label><input id="cy" name="city" autocomplete="address-level2" required></div>
+          <div class="f"><label for="st">State</label><select id="st" name="state" autocomplete="address-level1"><option value="WA">Washington</option><option value="OR">Oregon</option><option value="ID">Idaho</option><option value="CA">Northern California</option><option value="Other">Other</option></select></div>
           <div class="f"><label for="pt">Property type</label><select id="pt" name="ptype"><option>Retail / shopping center</option><option>Restaurant</option><option>Office</option><option>Multi-tenant</option><option>Warehouse / industrial</option><option>Mixed use</option><option>Other commercial</option></select></div>
           <div class="f"><label for="oc">Occupancy during work</label><select id="oc" name="occ"><option>Occupied / operating</option><option>Vacant</option><option>Partially occupied</option><option>Not sure</option></select></div>
           <div class="f full"><label for="ac">Access notes <small>(optional)</small></label><input id="ac" name="access" placeholder="Hours, keys, site contact, parking"></div>
@@ -593,6 +596,7 @@
   // Set to a form-handler URL to POST requests, or to a mailto: address.
   window.IVO_FORM_ENDPOINT = "mailto:office@ivoservgroup.com";
 </script>
-<script src="assets/js/site.js?v=prod5" defer></script>
+<script src="assets/js/ivo-api.js?v=2" defer></script>
+<script src="assets/js/site.js?v=prod8" defer></script>
 </body>
 </html>

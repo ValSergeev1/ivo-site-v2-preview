@@ -457,7 +457,8 @@
     return (el.value||"").trim();
   }
   function checked(form, name){
-    return $$("input[name='"+name+"']:checked", form).map(i => i.value);
+    // The trade picker keeps its picks in hidden inputs, which are never :checked.
+    return $$("input[name='"+name+"']", form).filter(i => i.type === "hidden" || i.checked).map(i => i.value);
   }
 
   function partnerPayload(form){
@@ -542,6 +543,62 @@
     return String(window.IVO_FORM_ENDPOINT || window.IVO_PARTNER_FORM_ENDPOINT || "").trim();
   }
 
+  function intOrUndef(v){
+    const n = parseInt(String(v||"").trim(), 10);
+    return Number.isFinite(n) && n >= 0 ? n : undefined;
+  }
+  // The platform's partner application (POST /public/partner-applications). Trade ids are the platform's ids.
+  function apiPartner(form){
+    const ids = checked(form, "trades");
+    const caps = field(form, "capabilities");
+    const extra = ids.length > 20 ? "\n\nMore trades: " + ids.slice(20).map(id => LABELS[id]||id).join(", ") : "";
+    const p = {
+      kind: field(form, "kind") === "vendor" ? "supplier" : "contractor",
+      companyName: field(form, "company"),
+      contactName: field(form, "name"),
+      contactEmail: field(form, "email"),
+      trades: ids.slice(0, 20),
+      regions: checked(form, "regions"),
+      capabilities: (caps + extra).slice(0, 3000),
+      website: field(form, "website")
+    };
+    if(field(form, "phone")) p.contactPhone = field(form, "phone").slice(0, 40);
+    const years = intOrUndef(field(form, "years")); if(years !== undefined && years <= 200) p.yearsInBusiness = years;
+    const crew = intOrUndef(field(form, "crew")); if(crew !== undefined && crew <= 100000) p.crewSize = crew;
+    return p;
+  }
+  /** Tries the platform. Returns true when handled (received, or refused with a message shown). */
+  async function sendToPlatform(form, status){
+    const api = window.IVO_API;
+    if(!api || !api.configured()) return false;
+    form._ivoKey = form._ivoKey || api.newKey();
+    const btn = form.querySelector("button[type=submit]");
+    if(btn) btn.disabled = true;
+    if(status){ status.hidden = false; status.textContent = "Sending…"; }
+    const r = await api.post("/public/partner-applications", apiPartner(form), [], form._ivoKey);
+    if(btn) btn.disabled = false;
+    if(r.kind === "ok"){
+      form._ivoKey = null;
+      form.hidden = true;
+      const done = form.parentElement && form.parentElement.querySelector("[data-form-done]");
+      if(done){
+        const title = done.querySelector("h2,h3");
+        if(title) title.textContent = "Application received.";
+        const p = done.querySelector("[data-done-body]") || done.querySelector("p");
+        if(p) p.textContent = "Your reference is " + r.ref + ". We review every application for fit and will follow up by email. Applying does not guarantee work or assignments.";
+        done.hidden = false;
+        done.focus && done.focus();
+      }
+      return true;
+    }
+    if(r.kind === "rejected"){
+      if(status){ status.hidden = false; status.textContent = r.message + " You can correct the form and try again, or email office@ivoservgroup.com."; }
+      return true;
+    }
+    if(status){ status.hidden = true; status.textContent = ""; }
+    return false;
+  }
+
   async function submitPartner(form){
     const status = $("[data-form-status]", form) || $("#pa-status", form);
     if(!validatePartner(form)){
@@ -550,6 +607,12 @@
       if(bad && bad.scrollIntoView) bad.scrollIntoView({behavior:"smooth", block:"center"});
       return;
     }
+    if(field(form, "website")) return; // honeypot
+    if(form._ivoSending) return;
+    form._ivoSending = true;
+    let handled = false;
+    try { handled = await sendToPlatform(form, status); } finally { form._ivoSending = false; }
+    if(handled) return;
     const data = partnerPayload(form);
     const ep = endpoint();
     if(/^mailto:/i.test(ep)){

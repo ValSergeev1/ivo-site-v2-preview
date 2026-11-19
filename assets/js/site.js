@@ -85,14 +85,15 @@ if('IntersectionObserver' in window){
   $$('video[data-poster]').forEach(v=>{if(!v.getAttribute('poster')) v.setAttribute('poster', v.getAttribute('data-poster'));});
 }
 // request form. Lives on the home page only.
-// Sending uses window.IVO_FORM_ENDPOINT: a handler URL, or a mailto: address.
+// Sending: the IVO platform (assets/js/ivo-api.js, IVO_API_BASE) when configured and reachable; otherwise
+// window.IVO_FORM_ENDPOINT, a handler URL or a mailto: address (the fallback).
 const f=$('#reqForm');if(!f)return;
 {const q=new URLSearchParams(location.search),sv=q.get('service'),ur=q.get('priority');
  if(sv){const i=f.querySelector(`input[name=svc][value="${CSS.escape(sv)}"]`);if(i)i.checked=true}
  if(ur){const i=f.querySelector(`input[name=urg][value="${CSS.escape(ur)}"]`);if(i)i.checked=true}}
 const steps=$$('fieldset',f),prog=$$('.req-prog span',f),prev=$('#prevBtn'),next=$('#nextBtn'),lbl=$('#stepLbl');
 const doneMsg=$('#doneMsg'),doneTitle=$('#doneTitle'),doneBody=$('#doneBody'),formAlert=$('#formAlert'),formNav=$('#formNav');
-let cur=0;const files=[];let sending=false;
+let cur=0;const files=[];let sending=false;let apiKey=null;
 function formEndpoint(){return String(window.IVO_FORM_ENDPOINT||"").trim()}
 function hideAlert(){if(formAlert){formAlert.hidden=true;formAlert.textContent=""}}
 function showAlert(msg){
@@ -126,7 +127,7 @@ function valid(){
   return ok;
 }
 function buildReview(){
-  const d=new FormData(f),rows=[['Requester',`${d.get('name')||'—'} · ${d.get('role')}`],['Property',d.get('address')||'—'],['Type',`${d.get('ptype')} · ${d.get('occ')}`],['Service',d.get('svc')],['Priority',d.get('urg')],['Budget',d.get('budget')],['Timing',d.get('timing')],['Files',files.length?files.length+' attached':'None yet']];
+  const d=new FormData(f),rows=[['Requester',`${d.get('name')||'—'} · ${d.get('role')}`],['Property',[d.get('address'),d.get('city'),d.get('state')].filter(Boolean).join(', ')||'—'],['Type',`${d.get('ptype')} · ${d.get('occ')}`],['Service',d.get('svc')],['Priority',d.get('urg')],['Budget',d.get('budget')],['Timing',d.get('timing')],['Files',files.length?files.length+' attached':'None yet']];
   $('#review').innerHTML=rows.map(([k,v])=>`<div><dt>${k}</dt><dd>${String(v).replace(/</g,'&lt;')}</dd></div>`).join('');
 }
 function requestPayload(){
@@ -160,6 +161,8 @@ function requestSummary(data){
     "",
     "Property",
     `Address: ${field(data,"address")}`,
+    `City: ${field(data,"city")}`,
+    `State: ${field(data,"state")}`,
     `Property type: ${field(data,"ptype")}`,
     `Occupancy during work: ${field(data,"occ")}`,
     `Access notes: ${field(data,"access")}`,
@@ -177,10 +180,73 @@ function requestSummary(data){
   ];
   return lines.join("\n");
 }
+// The service path on the form picks the platform's starting trade; staff re-classify the request when they review it.
+const SVC_TRADE={'Commercial construction':'general_contracting','Property services':'handyman','Emergency response':'restoration','Specialty':'general_contracting','Bid invitation':'general_contracting'};
+const URGENCY={'Emergency':'emergency','Urgent':'urgent','Standard':'standard','Planned':'planned'};
+function text(data,key){return String(data.get(key)||'').trim()}
+function apiRequest(data){
+  const extra=[
+    ['I am a',text(data,'role')],['Service path',text(data,'svc')],['Property type',text(data,'ptype')],
+    ['Occupancy during work',text(data,'occ')],['Access notes',text(data,'access')],['Budget range',text(data,'budget')],
+    ['Target timing',text(data,'timing')],['Text me status updates',text(data,'smsUpdates')==='yes'?'Yes':'No']
+  ].filter(([,v])=>v).map(([k,v])=>`${k}: ${v}`);
+  const p={
+    contactName:text(data,'name'),contactEmail:text(data,'email'),
+    trade:SVC_TRADE[text(data,'svc')]||'general_contracting',region:text(data,'state'),city:text(data,'city'),
+    scope:(text(data,'desc')+'\n\n'+extra.join('\n')).slice(0,5000),
+    urgency:URGENCY[text(data,'urg')]||'standard',website:text(data,'website')
+  };
+  if(text(data,'phone'))p.contactPhone=text(data,'phone').slice(0,40);
+  if(text(data,'company'))p.companyName=text(data,'company').slice(0,200);
+  if(text(data,'address'))p.addressLine1=text(data,'address').slice(0,300);
+  return p;
+}
+// "Invite IVO to bid" goes to the estimating team (Bidding), not to service dispatch.
+function apiBidInvitation(data){
+  const p=apiRequest(data);
+  const b={contactName:p.contactName,contactEmail:p.contactEmail,city:p.city||undefined,scope:p.scope,website:p.website};
+  if(['WA','OR','ID','CA'].includes(p.region))b.region=p.region;
+  if(p.contactPhone)b.contactPhone=p.contactPhone;
+  if(p.companyName)b.companyName=p.companyName;
+  return b;
+}
+/** Tries the platform. Returns true when the request is handled (received, or refused with a message shown). */
+async function sendToPlatform(data){
+  const api=window.IVO_API;
+  if(!api||!api.configured()||!api.filesFit(files))return false;
+  const bid=text(data,'svc')==='Bid invitation';
+  if(!bid&&(!['WA','OR','ID','CA'].includes(text(data,'state'))||!text(data,'city')))return false;
+  apiKey=apiKey||api.newKey();
+  sending=true;render();hideAlert();
+  const r=bid
+    ?await api.post('/public/bid-invitations',apiBidInvitation(data),files,apiKey)
+    :await api.post('/public/requests',apiRequest(data),files,apiKey);
+  sending=false;
+  if(r.kind==='ok'){
+    apiKey=null;
+    if(bid)showDone(
+      'Bid invitation received.',
+      `Your reference is ${r.ref}. Our estimating team will review it and reply from bid@ivoservgroup.com. You can also send plans and addenda to bid@ivoservgroup.com.`
+    );
+    else showDone(
+      'Request received.',
+      `Your reference is ${r.ref}. We will follow up at ${text(data,'email')||'the email you entered'}. If this is an emergency, please call (206) 539-9549 now — a form does not dispatch a crew.`
+    );
+    return true;
+  }
+  render();
+  if(r.kind==='rejected'){
+    showAlert(`${r.message} You can correct the form and try again, call (206) 539-9549, or email office@ivoservgroup.com.`);
+    return true;
+  }
+  return false;
+}
 async function submitRequest(){
   if(sending)return;
   const endpoint=formEndpoint();
   const data=requestPayload();
+  if(text(data,'website'))return; // honeypot
+  if(await sendToPlatform(data))return;
   const email=data.get('email')||'the email you entered';
   if(!endpoint){
     showDone(
@@ -190,7 +256,8 @@ async function submitRequest(){
     return;
   }
   if(/^mailto:/i.test(endpoint)){
-    const addr=endpoint.replace(/^mailto:/i,'').split('?')[0];
+    // Bid invitations go to the estimating inbox; everything else to the office.
+    const addr=text(data,'svc')==='Bid invitation'?'bid@ivoservgroup.com':endpoint.replace(/^mailto:/i,'').split('?')[0];
     const subject=encodeURIComponent(requestSubject(data));
     const body=requestSummary(data);
     window.location.href=`mailto:${addr}?subject=${subject}&body=${encodeURIComponent(body)}`;
@@ -221,7 +288,7 @@ next.addEventListener('click',()=>{
 });
 prev.addEventListener('click',()=>{if(cur){cur--;render()}});
 $('#resetForm').addEventListener('click',()=>{
-  f.reset();files.length=0;$('#files').innerHTML='';cur=0;sending=false;hideAlert();
+  f.reset();files.length=0;$('#files').innerHTML='';cur=0;sending=false;apiKey=null;hideAlert();
   if(doneMsg)doneMsg.hidden=true;if(formNav)formNav.hidden=false;
   const bar=$('.req-prog',f);if(bar)bar.hidden=false;
   render();emChk();
@@ -276,6 +343,7 @@ render();emChk();
 (() => {
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reduce) return;
+  if (window.matchMedia("(max-width:760px)").matches) return; // phones: open the next page straight away
   if ("startViewTransition" in document) return;
   document.addEventListener("click", (e) => {
     const a = e.target.closest("a[href]");
