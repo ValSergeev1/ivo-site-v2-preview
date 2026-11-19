@@ -9,7 +9,7 @@
  * the existing mailto: flow, so nobody loses a request.
  */
 (function(){
-  var IVO_API_BASE = "";
+  var IVO_API_BASE = "https://ivo-api-788578401988.us-west1.run.app"; // the live IVO platform (production)
 
   // What the platform accepts (it checks the file contents too): photos, PDFs and Office documents.
   var LIMITS = { maxFiles: 10, maxFileBytes: 15 * 1024 * 1024, maxTotalBytes: 30 * 1024 * 1024 };

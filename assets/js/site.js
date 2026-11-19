@@ -201,18 +201,34 @@ function apiRequest(data){
   if(text(data,'address'))p.addressLine1=text(data,'address').slice(0,300);
   return p;
 }
+// "Invite IVO to bid" goes to the estimating team (Bidding), not to service dispatch.
+function apiBidInvitation(data){
+  const p=apiRequest(data);
+  const b={contactName:p.contactName,contactEmail:p.contactEmail,city:p.city||undefined,scope:p.scope,website:p.website};
+  if(['WA','OR','ID','CA'].includes(p.region))b.region=p.region;
+  if(p.contactPhone)b.contactPhone=p.contactPhone;
+  if(p.companyName)b.companyName=p.companyName;
+  return b;
+}
 /** Tries the platform. Returns true when the request is handled (received, or refused with a message shown). */
 async function sendToPlatform(data){
   const api=window.IVO_API;
   if(!api||!api.configured()||!api.filesFit(files))return false;
-  if(!['WA','OR','ID','CA'].includes(text(data,'state'))||!text(data,'city'))return false;
+  const bid=text(data,'svc')==='Bid invitation';
+  if(!bid&&(!['WA','OR','ID','CA'].includes(text(data,'state'))||!text(data,'city')))return false;
   apiKey=apiKey||api.newKey();
   sending=true;render();hideAlert();
-  const r=await api.post('/public/requests',apiRequest(data),files,apiKey);
+  const r=bid
+    ?await api.post('/public/bid-invitations',apiBidInvitation(data),files,apiKey)
+    :await api.post('/public/requests',apiRequest(data),files,apiKey);
   sending=false;
   if(r.kind==='ok'){
     apiKey=null;
-    showDone(
+    if(bid)showDone(
+      'Bid invitation received.',
+      `Your reference is ${r.ref}. Our estimating team will review it and reply from bid@ivoservgroup.com. You can also send plans and addenda to bid@ivoservgroup.com.`
+    );
+    else showDone(
       'Request received.',
       `Your reference is ${r.ref}. We will follow up at ${text(data,'email')||'the email you entered'}. If this is an emergency, please call (206) 539-9549 now — a form does not dispatch a crew.`
     );
@@ -240,7 +256,8 @@ async function submitRequest(){
     return;
   }
   if(/^mailto:/i.test(endpoint)){
-    const addr=endpoint.replace(/^mailto:/i,'').split('?')[0];
+    // Bid invitations go to the estimating inbox; everything else to the office.
+    const addr=text(data,'svc')==='Bid invitation'?'bid@ivoservgroup.com':endpoint.replace(/^mailto:/i,'').split('?')[0];
     const subject=encodeURIComponent(requestSubject(data));
     const body=requestSummary(data);
     window.location.href=`mailto:${addr}?subject=${subject}&body=${encodeURIComponent(body)}`;
