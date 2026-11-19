@@ -276,6 +276,7 @@ render();emChk();
 (() => {
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reduce) return;
+  if (window.matchMedia("(max-width:760px)").matches) return; // phones: open the next page straight away
   if ("startViewTransition" in document) return;
   document.addEventListener("click", (e) => {
     const a = e.target.closest("a[href]");

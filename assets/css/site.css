@@ -962,3 +962,103 @@ html.page-leave body{opacity:0;transition:opacity .18s ease}
   img,video,iframe,svg,table,pre{max-width:100%}
   h1,h2,h3,h4,p,li,dd,a,summary,figcaption{overflow-wrap:break-word}
 }
+
+/* ===== App-style phone layout (<=760px). Same colours, type and words; desktop untouched. ===== */
+@media (max-width:760px){
+  /* Calm motion: content is simply there, nothing slides, fades or pulses while scrolling */
+  .rv,.rv.in{opacity:1!important;transform:none!important;transition:none!important}
+  .topbar .em::before{animation:none}
+  .svc,.role,.rel,.work-grid figure,.svc .ph img,.gal img,.btn,.btn .arr,.chips span,header.site{transition:none!important}
+  .svc:hover,.role:hover,.rel:hover,.svc:hover .ph img,.gal figure:hover img,.btn:hover .arr{transform:none!important;box-shadow:none}
+  html.page-leave body{opacity:1;transition:none}
+  html{scroll-padding-top:68px}
+
+  /* Compact top bar */
+  .topbar .wrap{height:30px}
+  .topbar a{font-size:12.5px}
+  header.site .wrap{height:54px!important}
+  .brand{gap:10px}
+  .brand img{width:34px;height:34px}
+  .brand .wm b{font-size:20px}
+  .brand .wm span{font-size:9px;margin-top:2px}
+
+  /* One spacing rhythm */
+  section{padding:40px 0}
+  .sec-head,.sec-head.center{margin-bottom:20px}
+  h2{font-size:30px;line-height:1.1;letter-spacing:-.025em}
+  .split h2{font-size:26px}
+  h3{font-size:19px}
+
+  /* Section labels as small chips */
+  .eyebrow{display:inline-flex;width:auto;max-width:100%;gap:8px;padding:5px 11px 5px 9px;margin-bottom:14px;border:1px solid #b38a5559;border-radius:999px;background:#b38a550d;color:var(--gold-ink);font-size:10.5px;letter-spacing:.15em;line-height:1.3}
+  .eyebrow::before{width:6px;height:6px;border-radius:50%;background:var(--gold);flex:none}
+  .dark .eyebrow,.emergency .eyebrow,.cta .eyebrow,.hero .eyebrow,.phero .eyebrow,.portal-hero .eyebrow,.scenario .eyebrow{color:var(--gold-l);border-color:#e1c39559;background:#e1c39512}
+  .tag{border-radius:999px;padding:4px 10px}
+  .link{color:var(--gold-ink)}
+  .dark .link,.emergency .link,.cta .link,.scenario .link,.hero .link,.phero .link{color:var(--gold-l)}
+  /* Small gold labels readable on their backgrounds (same hues the site already uses) */
+  .tier .lvl,.values b,.ind .n,.promise-grid i,.steps li::before,.path li::before{color:var(--gold-ink)}
+  .tier.em .lvl,.dark .path li::before,.model-grid article .n,.dark .role .n{color:var(--gold-l)}
+  .mist h2 em,.mist h1 em{color:#9d7746}
+  /* Gold buttons carry navy text, like the bottom bar's Start a request */
+  .btn:not(.ghost):not(.line){color:var(--navy)}
+  .svc .ph span,.split-img .cap{border-radius:999px;padding:5px 11px;font-size:10px}
+  .svc .ph span{background:#061d2ab3;text-shadow:none}
+
+  /* Cards */
+  .svc,.role,.rel,.tier,.det,.det-acc,.ind,.model-grid article,.scenario,.callcard,.partner-apply,.portal-card,.status-row li,.wt,.explainer,.note,.review,.drop,.files div{border-radius:14px}
+  .svc,.rel,.scenario,.wt,.explainer,.gal figure,.work-grid figure,.split-img,.about-img,.tier{overflow:hidden}
+  .gal figure,.work-grid figure,.split-img,.about-img{border-radius:14px}
+  .svc,.role,.rel,.det,.ind{box-shadow:0 1px 2px #061d2a0f,0 8px 24px -18px #061d2a40}
+  .callcard{border-top-width:3px}
+
+  /* Buttons and taps */
+  .btn{border-radius:12px;min-height:48px}
+  .btn.sm{min-height:44px}
+  .svc-tabs button,.proc-tabs button,.platform-steps button,.wt-tabs button{min-height:44px}
+  .svc-tabs button{border-radius:999px}
+  .proc-tabs{border-radius:12px;overflow:hidden;display:flex;width:100%}
+  .proc-tabs button{flex:1}
+
+  /* Request form: app-style steps and fields */
+  form.req{border-radius:18px;overflow:hidden;box-shadow:0 12px 32px -24px #061d2a80}
+  .req-prog{gap:6px;padding:12px 12px 0;border-bottom:0}
+  .req-prog span{border:0!important;border-radius:999px;background:var(--mist);text-align:center;padding:8px 4px!important;font-size:10.5px!important;line-height:1.25;display:flex;align-items:center;justify-content:center}
+  .req-prog span.on{background:var(--navy);color:#fff}
+  .req-prog span.done{background:#f3e8d6;color:var(--gold-ink)}
+  fieldset{padding:20px 16px}
+  legend{font-size:19px;margin-bottom:14px}
+  .fg{gap:14px}
+  .f label,.f .lab{font-size:13px;font-weight:500;color:var(--navy)}
+  .f input,.f select,.f textarea,.portal-card input,.trade-search{min-height:50px;font-size:16px;border-radius:12px;background:#f6f8fa;border:1px solid var(--line);padding:12px 14px}
+  .f textarea{min-height:120px}
+  .f input:focus,.f select:focus,.f textarea:focus,.portal-card input:focus,.trade-search:focus{outline:none;border-color:var(--gold);background:#fff;box-shadow:0 0 0 3px #b38a5533}
+  .chips{gap:8px}
+  .chips span{border-radius:999px;min-height:44px;display:inline-flex;align-items:center;padding:0 16px}
+  .urg{grid-template-columns:1fr 1fr}
+  .urg span{border-radius:12px;min-height:60px}
+  .form-nav{padding:14px 16px}
+  .form-nav .btn{min-width:132px;justify-content:center}
+  .trade-list{border-radius:12px}
+  .trade-chip{border-radius:999px}
+  .checks.regions label{min-height:44px}
+
+  /* Lists and accordions as tidy panels */
+  .faq-grid details,.faq-sec details{padding:0 2px}
+  summary{font-size:16.5px;padding:16px 40px 16px 0}
+  summary::after{top:12px}
+
+  /* Bottom action bar: thumb-friendly tabs */
+  .mbar{padding:6px calc(8px + env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) calc(8px + env(safe-area-inset-left,0px));gap:6px;min-height:64px;background:rgba(6,29,42,.97);box-shadow:0 -10px 30px -18px #061d2acc}
+  .mbar .mbar-btn,.mbar a{min-height:52px!important;border-radius:12px;font-size:10.5px;letter-spacing:.08em}
+  .mbar .mbar-cta{border-radius:12px;font-size:12px;letter-spacing:.04em;color:#061d2a}
+  .mbar a[href^="tel:"]::before{content:"";display:block;width:18px;height:18px;margin-bottom:3px;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z'/%3E%3C/svg%3E") center/contain no-repeat}
+  .mbar .mbar-ico{margin-bottom:7px}
+  body{padding-bottom:calc(64px + env(safe-area-inset-bottom,0px))}
+  nav.main{padding-bottom:calc(28px + env(safe-area-inset-bottom,0px) + 72px)}
+  nav.main a{min-height:50px}
+  nav.main a.btn{border-radius:12px}
+}
+@media (max-width:760px){
+  @view-transition{navigation:none}
+}
