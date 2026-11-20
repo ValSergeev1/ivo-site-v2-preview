@@ -473,6 +473,7 @@
       phone: field(form, "phone"),
       years: field(form, "years"),
       crew: field(form, "crew"),
+      licenseNumber: field(form, "licenseNumber"),
       trades: trades.join(", ") || "(none selected)",
       regions: regions.join(", ") || "(none selected)",
       capabilities: field(form, "capabilities")
@@ -530,6 +531,7 @@
       "Phone: " + (data.phone || "(not provided)"),
       "Years in business: " + (data.years || "(not provided)"),
       "Crew size: " + (data.crew || "(not provided)"),
+      "State contractor license #: " + (data.licenseNumber || "(not provided)"),
       "Trades: " + data.trades,
       "States: " + data.regions,
       "",
@@ -550,6 +552,8 @@
   // The platform's partner application (POST /public/partner-applications). Trade ids are the platform's ids.
   function apiPartner(form){
     const ids = checked(form, "trades");
+    const lic = field(form, "licenseNumber").slice(0, 80);
+    const licPrefix = lic ? "State contractor license #: " + lic + "\n\n" : "";
     const caps = field(form, "capabilities");
     const extra = ids.length > 20 ? "\n\nMore trades: " + ids.slice(20).map(id => LABELS[id]||id).join(", ") : "";
     const p = {
@@ -559,7 +563,7 @@
       contactEmail: field(form, "email"),
       trades: ids.slice(0, 20),
       regions: checked(form, "regions"),
-      capabilities: (caps + extra).slice(0, 3000),
+      capabilities: (licPrefix + caps + extra).slice(0, 3000),
       website: field(form, "website")
     };
     if(field(form, "phone")) p.contactPhone = field(form, "phone").slice(0, 40);
