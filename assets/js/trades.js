@@ -536,7 +536,8 @@
       "States: " + data.regions,
       "",
       "Capabilities:",
-      data.capabilities
+      data.capabilities,
+      ...((window.IVO_ATTR && window.IVO_ATTR.summaryLines().length) ? ["", ...window.IVO_ATTR.summaryLines()] : [])
     ];
     return lines.join("\n");
   }
@@ -569,6 +570,8 @@
     if(field(form, "phone")) p.contactPhone = field(form, "phone").slice(0, 40);
     const years = intOrUndef(field(form, "years")); if(years !== undefined && years <= 200) p.yearsInBusiness = years;
     const crew = intOrUndef(field(form, "crew")); if(crew !== undefined && crew <= 100000) p.crewSize = crew;
+    const attribution = window.IVO_ATTR && window.IVO_ATTR.payload();
+    if(attribution) p.attribution = attribution;
     return p;
   }
   /** Tries the platform. Returns true when handled (received, or refused with a message shown). */

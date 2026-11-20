@@ -2,9 +2,11 @@
 
 Marketing site for [ivoservgroup.com](https://ivoservgroup.com). Static HTML, CSS and JavaScript, served by nginx.
 
-Pages: `/`, `/commercial-construction/`, `/property-services/`, `/emergency-property-response/`, `/specialty-services/`, `/our-work/`, `/about-ivo/`, `/how-to-work-with-ivo/`, `/our-apps/`, `/partner-with-ivo/`, `/portal/`.
+Pages: `/`, `/locations/washington/`, `/locations/oregon/`, `/locations/idaho/` (state service-area pages, built by `python3 tools/build-locations.py`), `/commercial-construction/`, `/property-services/`, `/emergency-property-response/`, `/specialty-services/`, `/our-work/`, `/about-ivo/`, `/how-to-work-with-ivo/`, `/our-apps/`, `/partner-with-ivo/`, `/portal/`.
 
 - Shared styles and scripts: `assets/css/site.css`, `assets/js/site.js`
+- Campaign attribution: `assets/js/attribution.js` (on every page) keeps the first and latest UTM / gclid / fbclid / referrer visit in localStorage, adds them as hidden fields to every form, and the request and partner forms send them to the platform as `attribution`. Tagging rules for links and ads: `docs/utm-naming.md`.
+- Links can preselect the request form's state with `?state=WA|OR|ID`.
 - The four-step request form lives only on the home page (`/#request`); every page links to it.
   Links can preselect the form with `?service=` / `?priority=` (e.g. `/?service=Emergency%20response&priority=Emergency#request`).
 - The home-page request form opens an email to `office@ivoservgroup.com` (`window.IVO_FORM_ENDPOINT` in `index.html`). Change that value to a form-handler URL or a different `mailto:` address if the destination changes.
