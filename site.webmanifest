@@ -1,7 +1,7 @@
 {
   "name": "IVO Group",
   "short_name": "IVO",
-  "description": "Commercial construction and property services for Washington, Oregon, Idaho and Northern California.",
+  "description": "Commercial construction and property services for Washington, Oregon, and Idaho.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
