@@ -29,7 +29,7 @@
 <meta name="twitter:description" content="A clear place to start for customers, independent contractors and suppliers. Tell us what you need or what your business can provide, and use the relevant…">
 <meta name="twitter:image" content="https://ivoservgroup.com/assets/img/og-image.jpg">
 <link rel="canonical" href="https://ivoservgroup.com/partner-with-ivo/">
-<link rel="stylesheet" href="../assets/css/site.css?v=prod8">
+<link rel="stylesheet" href="../assets/css/site.css?v=prod9">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": ["Organization", "LocalBusiness", "GeneralContractor"], "name": "IVO Group", "legalName": "IVO Group", "url": "https://ivoservgroup.com/", "logo": "https://ivoservgroup.com/assets/img/icon-512.png", "image": "https://ivoservgroup.com/assets/img/og-image.jpg", "telephone": "+1-206-539-9549", "email": "office@ivoservgroup.com", "areaServed": [{"@type": "State", "name": "Washington"}, {"@type": "State", "name": "Oregon"}, {"@type": "State", "name": "Idaho"}, {"@type": "AdministrativeArea", "name": "Northern California"}], "description": "Commercial construction and property services for Washington, Oregon, Idaho and Northern California."}</script>
 </head>
 <body>
@@ -121,9 +121,9 @@
         </div>
       </div>
       <div class="fg">
-        <div class="f full"><label for="pa-co">Company name</label><input id="pa-co" name="company" autocomplete="organization" required><span class="err" id="pa-co-err" aria-live="polite"></span></div>
-        <div class="f"><label for="pa-nm">Contact name</label><input id="pa-nm" name="name" autocomplete="name" required><span class="err" id="pa-nm-err" aria-live="polite"></span></div>
-        <div class="f"><label for="pa-em">Email</label><input id="pa-em" name="email" type="email" autocomplete="email" required><span class="err" id="pa-em-err" aria-live="polite"></span></div>
+        <div class="f full"><label for="pa-co">Company name</label><input id="pa-co" name="company" aria-describedby="pa-co-err" autocomplete="organization" required><span class="err" id="pa-co-err" aria-live="polite"></span></div>
+        <div class="f"><label for="pa-nm">Contact name</label><input id="pa-nm" name="name" aria-describedby="pa-nm-err" autocomplete="name" required><span class="err" id="pa-nm-err" aria-live="polite"></span></div>
+        <div class="f"><label for="pa-em">Email</label><input id="pa-em" name="email" aria-describedby="pa-em-err" type="email" autocomplete="email" required><span class="err" id="pa-em-err" aria-live="polite"></span></div>
         <div class="f"><label for="pa-ph">Phone <small>(optional)</small></label><input id="pa-ph" name="phone" type="tel" autocomplete="tel"></div>
         <div class="f"><label for="pa-years">Years in business <small>(optional)</small></label><input id="pa-years" name="years" type="number" min="0" max="200" inputmode="numeric"></div>
         <div class="f"><label for="pa-crew">Crew size <small>(optional)</small></label><input id="pa-crew" name="crew" type="number" min="0" max="100000" inputmode="numeric"></div>
@@ -135,7 +135,7 @@
         <span class="err" id="trades-err" aria-live="polite"></span>
       </div>
       <div class="f full" data-require-regions><span class="lab" id="regions-l">States you cover</span>
-        <div class="checks regions" role="group" aria-labelledby="regions-l">
+        <div class="checks regions" role="group" aria-labelledby="regions-l" aria-describedby="regions-err">
           <label><input type="checkbox" name="regions" value="WA">Washington</label>
           <label><input type="checkbox" name="regions" value="OR">Oregon</label>
           <label><input type="checkbox" name="regions" value="ID">Idaho</label>
@@ -231,8 +231,9 @@
 <!-- mcall kept as fallback; hidden by CSS -->
 <div class="mcall"><a href="tel:+12065399549">Call</a><a href="../#request">Start a request</a></div>
 <script>window.IVO_FORM_ENDPOINT = "mailto:office@ivoservgroup.com";</script>
+<script src="../assets/js/attribution.js?v=1" defer></script>
 <script src="../assets/js/ivo-api.js?v=2" defer></script>
-<script src="../assets/js/trades.js?v=trades3" defer></script>
-<script src="../assets/js/site.js?v=prod8" defer></script>
+<script src="../assets/js/trades.js?v=trades4" defer></script>
+<script src="../assets/js/site.js?v=prod9" defer></script>
 </body>
 </html>

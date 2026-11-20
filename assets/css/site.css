@@ -1103,3 +1103,14 @@ html.page-leave body{opacity:0;transition:opacity .18s ease}
   /* Button arrows don't nudge sideways */
   .btn:hover .arr{transform:none}
 }
+/* Request form: remove a selected file; note for files that cannot be uploaded */
+.files .file-rm{margin-left:auto;flex:none;width:28px;height:28px;min-width:28px;border:0;background:transparent;color:var(--muted);font-size:18px;line-height:1;cursor:pointer;border-radius:50%}
+.files .file-rm:hover,.files .file-rm:focus-visible{background:var(--mist);color:var(--navy);outline:2px solid var(--gold)}
+.file-note{margin:10px 0 0;padding:10px 12px;background:#fbf5ec;border:1px solid #ead9bf;color:#5f4a2c;font-size:13.5px;line-height:1.5}
+.file-note[hidden]{display:none}
+.req [aria-invalid=true],.partner-form [aria-invalid=true]{border-color:#842e37!important}
+legend:focus{outline:none}
+/* Service-area pages */
+.loc-list{columns:3 180px;column-gap:28px;margin:18px 0 0;padding:0;list-style:none;font-size:15px}
+.loc-list li{padding:6px 0;border-bottom:1px solid var(--line);break-inside:avoid}
+.loc-states{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}

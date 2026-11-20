@@ -88,7 +88,8 @@ if('IntersectionObserver' in window){
 // Sending: the IVO platform (assets/js/ivo-api.js, IVO_API_BASE) when configured and reachable; otherwise
 // window.IVO_FORM_ENDPOINT, a handler URL or a mailto: address (the fallback).
 const f=$('#reqForm');if(!f)return;
-{const q=new URLSearchParams(location.search),sv=q.get('service'),ur=q.get('priority');
+{const q=new URLSearchParams(location.search),sv=q.get('service'),ur=q.get('priority'),stt=q.get('state');
+ if(stt){const o=f.querySelector(`select[name=state] option[value="${CSS.escape(stt.toUpperCase())}"]`);if(o)o.selected=true}
  if(sv){const i=f.querySelector(`input[name=svc][value="${CSS.escape(sv)}"]`);if(i)i.checked=true}
  if(ur){const i=f.querySelector(`input[name=urg][value="${CSS.escape(ur)}"]`);if(i)i.checked=true}}
 const steps=$$('fieldset',f),prog=$$('.req-prog span',f),prev=$('#prevBtn'),next=$('#nextBtn'),lbl=$('#stepLbl');
@@ -121,16 +122,34 @@ function render(){
   lbl.textContent=`Step ${cur+1} of ${steps.length}`;
   if(cur===3)buildReview();
 }
-function valid(){
-  const req=$$('[required]',steps[cur]);let ok=true;
-  req.forEach(i=>{const bad=!i.value.trim()||(i.type==='email'&&!/^\S+@\S+\.\S+$/.test(i.value));i.style.borderColor=bad?'#842e37':'';if(bad&&ok){i.focus();ok=false}});
-  return ok;
+function fieldName(i){const l=i.id&&f.querySelector(`label[for="${i.id}"]`);return l?l.childNodes[0].textContent.trim():i.name}
+function badInput(i){
+  const v=i.value.trim();
+  if(i.required&&!v)return 'required';
+  if(i.type==='email'&&v&&!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(v))return 'email';
+  if(i.type==='tel'&&v&&v.replace(/\D/g,'').length<10)return 'phone';
+  return '';
 }
+function markInput(i,bad){i.style.borderColor=bad?'#842e37':'';if(bad)i.setAttribute('aria-invalid','true');else i.removeAttribute('aria-invalid')}
+function valid(){
+  const inputs=$$('input:not([type=hidden]):not([type=radio]):not([type=checkbox]):not([type=file]),textarea,select',steps[cur]).filter(i=>i.name!=='website');
+  const problems=[];let first=null;
+  inputs.forEach(i=>{const why=badInput(i);markInput(i,!!why);if(why){problems.push(why==='email'?`${fieldName(i)} (check the address)`:why==='phone'?`${fieldName(i)} (include the area code)`:fieldName(i));first=first||i}});
+  if(first){
+    showAlert(`Please complete: ${problems.join(', ')}.`);
+    first.focus();
+    return false;
+  }
+  hideAlert();
+  return true;
+}
+f.addEventListener('input',e=>{const i=e.target;if(i.getAttribute&&i.getAttribute('aria-invalid')==='true'&&!badInput(i))markInput(i,false)});
 function buildReview(){
   const d=new FormData(f),rows=[['Requester',`${d.get('name')||'—'} · ${d.get('role')}`],['Property',[d.get('address'),d.get('city'),d.get('state')].filter(Boolean).join(', ')||'—'],['Type',`${d.get('ptype')} · ${d.get('occ')}`],['Service',d.get('svc')],['Priority',d.get('urg')],['Budget',d.get('budget')],['Timing',d.get('timing')],['Files',files.length?files.length+' attached':'None yet']];
   $('#review').innerHTML=rows.map(([k,v])=>`<div><dt>${k}</dt><dd>${String(v).replace(/</g,'&lt;')}</dd></div>`).join('');
 }
 function requestPayload(){
+  if(window.IVO_ATTR)window.IVO_ATTR.fill(f); // hidden utm_*/gclid/fbclid/landing_page/referrer fields
   const data=new FormData(f);
   if(!data.get('smsUpdates')) data.set('smsUpdates','no');
   files.forEach(file=>data.append('files',file,file.name));
@@ -176,7 +195,8 @@ function requestSummary(data){
     `Text me status updates: ${field(data,"smsUpdates")==="yes"?"Yes":"No"}`,
     `Photos, plans or files: ${fileNote}`,
     "",
-    "Source page: "+field(data,"source")
+    "Source page: "+field(data,"source"),
+    ...((window.IVO_ATTR&&window.IVO_ATTR.summaryLines())||[])
   ];
   return lines.join("\n");
 }
@@ -199,6 +219,8 @@ function apiRequest(data){
   if(text(data,'phone'))p.contactPhone=text(data,'phone').slice(0,40);
   if(text(data,'company'))p.companyName=text(data,'company').slice(0,200);
   if(text(data,'address'))p.addressLine1=text(data,'address').slice(0,300);
+  const attribution=window.IVO_ATTR&&window.IVO_ATTR.payload();
+  if(attribution)p.attribution=attribution;
   return p;
 }
 // "Invite IVO to bid" goes to the estimating team (Bidding), not to service dispatch.
@@ -208,6 +230,7 @@ function apiBidInvitation(data){
   if(['WA','OR','ID','CA'].includes(p.region))b.region=p.region;
   if(p.contactPhone)b.contactPhone=p.contactPhone;
   if(p.companyName)b.companyName=p.companyName;
+  if(p.attribution)b.attribution=p.attribution;
   return b;
 }
 /** Tries the platform. Returns true when the request is handled (received, or refused with a message shown). */
@@ -283,12 +306,14 @@ async function submitRequest(){
 }
 next.addEventListener('click',()=>{
   if(!valid())return;
-  if(cur<steps.length-1){cur++;render();f.scrollIntoView({behavior:'smooth',block:'start'});return}
+  if(cur<steps.length-1){cur++;render();f.scrollIntoView({behavior:'smooth',block:'start'});focusStep();return}
   submitRequest();
 });
-prev.addEventListener('click',()=>{if(cur){cur--;render()}});
+prev.addEventListener('click',()=>{if(cur){cur--;render();hideAlert();focusStep()}});
+// Screen readers and keyboards land on the new step's heading, not on the (now hidden) button they pressed.
+function focusStep(){const lg=$('legend',steps[cur]);if(!lg)return;lg.tabIndex=-1;lg.focus({preventScroll:true})}
 $('#resetForm').addEventListener('click',()=>{
-  f.reset();files.length=0;$('#files').innerHTML='';cur=0;sending=false;apiKey=null;hideAlert();
+  f.reset();files.length=0;$('#files').innerHTML='';if(fileNote){fileNote.hidden=true;fileNote.textContent=''}cur=0;sending=false;apiKey=null;hideAlert();
   if(doneMsg)doneMsg.hidden=true;if(formNav)formNav.hidden=false;
   const bar=$('.req-prog',f);if(bar)bar.hidden=false;
   render();emChk();
@@ -298,9 +323,39 @@ function emChk(){const e=f.querySelector('input[name=urg]:checked')?.value==='Em
 $$('input[name=urg],input[name=svc]',f).forEach(i=>i.addEventListener('change',emChk));
 // files
 const drop=$('#drop'),fin=$('#fileIn'),list=$('#files');
-function add(fl){[...fl].forEach(file=>{files.push(file);const d=document.createElement('div');
-  if(file.type.startsWith('image/')){const im=new Image();im.src=URL.createObjectURL(file);d.appendChild(im)}else{const x=document.createElement('span');x.className='doc';x.textContent=(file.name.split('.').pop()||'FILE').toUpperCase().slice(0,4);d.appendChild(x)}
-  const n=document.createElement('span');n.textContent=file.name;d.appendChild(n);list.appendChild(d)});buildReview()}
+// Only files the IVO platform accepts are added (same rules as assets/js/ivo-api.js); anything else is listed in a note
+// with the email to send it to, so one DWG or ZIP no longer pushes the whole request onto the email fallback.
+const fileNote=$('#fileNote');
+function fileProblem(file,count,total){
+  const api=window.IVO_API,lim=api&&api.limits;if(!lim)return '';
+  const ext=(file.name.split('.').pop()||'').toLowerCase();
+  if(!['pdf','jpg','jpeg','png','webp','heic','heif','doc','docx','xls','xlsx','ppt','pptx'].includes(ext))return 'type';
+  if(!file.size)return 'empty';
+  if(file.size>lim.maxFileBytes)return 'size';
+  if(count>=lim.maxFiles)return 'count';
+  if(total+file.size>lim.maxTotalBytes)return 'total';
+  return '';
+}
+function add(fl){
+  const skipped=[];
+  [...fl].forEach(file=>{
+    const why=fileProblem(file,files.length,files.reduce((n,x)=>n+x.size,0));
+    if(why){skipped.push(`${file.name} (${{type:'file type not supported',empty:'empty file',size:'over 15 MB',count:'10 files max',total:'30 MB total max'}[why]})`);return}
+    files.push(file);
+    const d=document.createElement('div');d.setAttribute('role','listitem');
+    if(file.type.startsWith('image/')){const im=new Image();im.alt='';im.src=URL.createObjectURL(file);d.appendChild(im)}else{const x=document.createElement('span');x.className='doc';x.textContent=(file.name.split('.').pop()||'FILE').toUpperCase().slice(0,4);d.appendChild(x)}
+    const n=document.createElement('span');n.textContent=file.name;d.appendChild(n);
+    const rm=document.createElement('button');rm.type='button';rm.className='file-rm';rm.textContent='×';rm.setAttribute('aria-label',`Remove ${file.name}`);
+    rm.addEventListener('click',()=>{const k=files.indexOf(file);if(k>=0)files.splice(k,1);d.remove();buildReview();drop.focus()});
+    d.appendChild(rm);list.appendChild(d);
+  });
+  if(fileNote){
+    fileNote.hidden=!skipped.length;
+    fileNote.textContent=skipped.length?`Not added: ${skipped.join('; ')}. Send ${skipped.length===1?'it':'them'} to office@ivoservgroup.com (bid documents to bid@ivoservgroup.com) after you submit, with your reference number.`:'';
+  }
+  fin.value='';
+  buildReview();
+}
 drop.addEventListener('click',()=>fin.click());drop.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();fin.click()}});
 fin.addEventListener('change',()=>add(fin.files));
 ['dragenter','dragover'].forEach(t=>drop.addEventListener(t,e=>{e.preventDefault();drop.classList.add('over')}));

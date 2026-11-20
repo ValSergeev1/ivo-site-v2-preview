@@ -31,7 +31,7 @@
 <meta name="twitter:description" content="One accountable contact for tenant improvements, renovations, repairs, turnovers and emergency property response across Washington, Oregon, Idaho and Northern California.">
 <meta name="twitter:image" content="https://ivoservgroup.com/assets/img/og-image.jpg">
 <link rel="canonical" href="https://ivoservgroup.com/">
-<link rel="stylesheet" href="assets/css/site.css?v=prod8">
+<link rel="stylesheet" href="assets/css/site.css?v=prod9">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": ["Organization", "LocalBusiness", "GeneralContractor"], "name": "IVO Group", "legalName": "IVO Group", "url": "https://ivoservgroup.com/", "logo": "https://ivoservgroup.com/assets/img/icon-512.png", "image": "https://ivoservgroup.com/assets/img/og-image.jpg", "telephone": "+1-206-539-9549", "email": "office@ivoservgroup.com", "areaServed": [{"@type": "State", "name": "Washington"}, {"@type": "State", "name": "Oregon"}, {"@type": "State", "name": "Idaho"}, {"@type": "AdministrativeArea", "name": "Northern California"}], "description": "Commercial construction and property services for Washington, Oregon, Idaho and Northern California."}</script>
 </head>
 <body>
@@ -388,6 +388,7 @@
       </div>
       <p style="margin-top:24px;font-size:14px;color:#8fa4b2">Outside these areas, or a multi-site portfolio? Tell us the locations and we'll confirm coverage before you commit.</p>
       <p class="more-row" style="margin-top:22px"><a class="btn line" href="about-ivo/#service-area" style="color:#fff;border-color:#ffffff44">Service area →</a></p>
+      <nav class="loc-states" aria-label="Service area by state"><a class="btn line sm" href="locations/washington/" style="color:#fff;border-color:#ffffff44">Washington</a><a class="btn line sm" href="locations/oregon/" style="color:#fff;border-color:#ffffff44">Oregon</a><a class="btn line sm" href="locations/idaho/" style="color:#fff;border-color:#ffffff44">Idaho</a></nav>
     </div>
   </div>
 </section>
@@ -468,8 +469,8 @@
       <fieldset data-step="1">
         <legend>Who's making the request?</legend>
         <div class="fg">
-          <div class="f full"><span class="lab">I am a…</span>
-            <div class="chips" role="radiogroup">
+          <div class="f full"><span class="lab" id="role-l">I am a…</span>
+            <div class="chips" role="radiogroup" aria-labelledby="role-l">
               <label><input type="radio" name="role" value="Property manager" checked><span>Property manager</span></label>
               <label><input type="radio" name="role" value="Owner"><span>Owner</span></label>
               <label><input type="radio" name="role" value="Tenant / business"><span>Tenant / business</span></label>
@@ -498,16 +499,16 @@
       <fieldset data-step="3" hidden>
         <legend>What do you need?</legend>
         <div class="fg">
-          <div class="f full"><span class="lab">Service path</span>
-            <div class="chips">
+          <div class="f full"><span class="lab" id="svc-l">Service path</span>
+            <div class="chips" role="radiogroup" aria-labelledby="svc-l">
               <label><input type="radio" name="svc" value="Commercial construction" checked><span>Construction / TI</span></label>
               <label><input type="radio" name="svc" value="Property services"><span>Repair / turnover</span></label>
               <label><input type="radio" name="svc" value="Emergency response"><span>Emergency response</span></label>
               <label><input type="radio" name="svc" value="Specialty"><span>Specialty / not sure</span></label>
               <label><input type="radio" name="svc" value="Bid invitation"><span>Invite IVO to bid</span></label>
             </div></div>
-          <div class="f full"><span class="lab">How urgent is it?</span>
-            <div class="urg">
+          <div class="f full"><span class="lab" id="urg-l">How urgent is it?</span>
+            <div class="urg" role="radiogroup" aria-labelledby="urg-l">
               <label><input type="radio" name="urg" value="Emergency"><span><b>Emergency</b>Unsafe or unsecured now</span></label>
               <label><input type="radio" name="urg" value="Urgent"><span><b>Urgent</b>Affecting operations</span></label>
               <label><input type="radio" name="urg" value="Standard" checked><span><b>Standard</b>Repair or turnover</span></label>
@@ -523,11 +524,12 @@
         <legend>Photos, plans &amp; review</legend>
         <div class="fg">
           <div class="f full">
-            <div class="drop" id="drop" tabindex="0" role="button" aria-label="Add photos or files"><b>Drop photos, plans or bid documents</b><br>or click to browse · JPG, PNG, PDF, DWG, XLSX</div>
-            <input type="file" id="fileIn" multiple hidden accept="image/*,.pdf,.dwg,.xlsx,.xls,.doc,.docx,.zip">
-            <div class="files" id="files"></div></div>
+            <div class="drop" id="drop" tabindex="0" role="button" aria-label="Add photos or files" aria-describedby="drop-hint"><b>Drop photos, plans or bid documents</b><br><span id="drop-hint">or click to browse · photos (JPG, PNG, WebP, HEIC), PDF, Word, Excel, PowerPoint · up to 10 files, 15 MB each</span></div>
+            <input type="file" id="fileIn" multiple hidden aria-label="Add photos or files" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.jpg,.jpeg,.png,.webp,.heic,.heif,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx">
+            <p class="file-note" id="fileNote" role="status" aria-live="polite" hidden></p>
+            <div class="files" id="files" role="list" aria-label="Selected files"></div></div>
           <div class="f full"><span class="lab">Review</span><dl class="review" id="review"></dl></div>
-          <div class="f full"><label style="display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--muted)"><input type="checkbox" name="smsUpdates" value="yes" style="width:auto;margin-top:4px" checked> Text me status updates about this request.</label></div>
+          <div class="f full"><label style="display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--muted)"><input type="checkbox" name="smsUpdates" value="yes" style="width:auto;margin-top:4px"> Text me status updates about this request. <small>(optional)</small></label></div>
         </div>
       </fieldset>
       <div class="done-msg" id="doneMsg" hidden>
@@ -597,7 +599,8 @@
   // Set to a form-handler URL to POST requests, or to a mailto: address.
   window.IVO_FORM_ENDPOINT = "mailto:office@ivoservgroup.com";
 </script>
+<script src="assets/js/attribution.js?v=1" defer></script>
 <script src="assets/js/ivo-api.js?v=2" defer></script>
-<script src="assets/js/site.js?v=prod8" defer></script>
+<script src="assets/js/site.js?v=prod9" defer></script>
 </body>
 </html>
