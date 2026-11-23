@@ -205,7 +205,7 @@ function apiRequest(data){
 function apiBidInvitation(data){
   const p=apiRequest(data);
   const b={contactName:p.contactName,contactEmail:p.contactEmail,city:p.city||undefined,scope:p.scope,website:p.website};
-  if(['WA','OR','ID','CA'].includes(p.region))b.region=p.region;
+  if(['WA','OR','ID'].includes(p.region))b.region=p.region;
   if(p.contactPhone)b.contactPhone=p.contactPhone;
   if(p.companyName)b.companyName=p.companyName;
   return b;
@@ -215,7 +215,7 @@ async function sendToPlatform(data){
   const api=window.IVO_API;
   if(!api||!api.configured()||!api.filesFit(files))return false;
   const bid=text(data,'svc')==='Bid invitation';
-  if(!bid&&(!['WA','OR','ID','CA'].includes(text(data,'state'))||!text(data,'city')))return false;
+  if(!bid&&(!['WA','OR','ID'].includes(text(data,'state'))||!text(data,'city')))return false;
   apiKey=apiKey||api.newKey();
   sending=true;render();hideAlert();
   const r=bid
